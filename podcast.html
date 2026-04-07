@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lytune-streaming App</title>
+  <link rel="icon" href="assets/images/logo.png" sizes="32x32" type="image/png">
+  <link rel="stylesheet" href="podcast.css">
+  <link rel="stylesheet" href="player.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="assets/images/logo.png" alt="Lytune">
+        <h1 class="logo-title">Lytune</h1>
+      </div>
+
+      <nav>
+        <a href="home.html" class="nav-link">
+          <img src="assets/images/home button.png" class="nav-icon" alt="Home">
+          <span>Home</span>
+        </a>
+        <a href="search.html" class="nav-link">
+          <img src="assets/images/search bar.png" class="nav-icon" alt="Search">
+          <span>Search</span>
+        </a>
+        <a href="podcast.html" class="nav-link active" aria-current="page">
+          <img src="assets/images/podcast.png" class="nav-icon" alt="Podcasts">
+          <span>Podcast</span>
+        </a>
+        <a href="downloads.html" class="nav-link">
+          <img src="assets/images/Download.png" class="nav-icon" alt="Download">
+          <span>Download</span>
+        </a>
+        <a href="library.html" class="nav-link">
+          <img src="assets/images/bx_library.png" class="nav-icon" alt="Library">
+          <span>Library</span>
+        </a>
+      </nav>
+
+      <div class="user-profile">
+        <img src="assets/images/profile.png" id="avatar" alt="Avatar">
+
+        <div class="user-info">
+          <span class="username" id="username">Adeyemi Jesse</span>
+        </div>
+
+        <div class="dropdown" id="dropdown">
+          <a href="setting.html" class="dropdown-link">Settings</a>
+          <button type="button" id="change-name">Edit name</button>
+          <label for="avatar-upload">Change photo</label>
+          <button type="button" id="logout">Logout</button>
+        </div>
+
+        <input type="file" id="avatar-upload" accept="image/*">
+      </div>
+    </aside>
+
+    <main class="content">
+      <section class="podcast-shell">
+        <header class="podcast-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Lytune spoken audio</p>
+            <h2>Podcasts with the same energy as your music.</h2>
+            <p class="hero-text">
+              The Podcast page is now a real destination instead of an empty file. It pulls shows from the Lytune backend,
+              highlights a featured title, and gives your app a richer streaming-platform feel.
+            </p>
+
+            <div class="hero-chips">
+              <span class="hero-chip">Music stories</span>
+              <span class="hero-chip">Culture</span>
+              <span class="hero-chip">Interviews</span>
+              <span class="hero-chip">Late-night listening</span>
+            </div>
+          </div>
+
+          <div class="hero-side">
+            <p class="section-kicker">Why this page matters</p>
+            <h3 class="hero-side-title">A real podcast home for Lytune</h3>
+            <p class="hero-side-copy">
+              Instead of sending users to a blank screen, this page now looks and behaves like part of the product, with live backend
+              data when available and a graceful saved fallback when it is not.
+            </p>
+
+            <div class="hero-side-list">
+              <div>
+                <strong>Featured show spotlight</strong>
+                <span>One strong show leads the page so the experience feels curated and premium.</span>
+              </div>
+              <div>
+                <strong>Backend-powered cards</strong>
+                <span>Podcast shows come from the app server, not a dead hardcoded page.</span>
+              </div>
+              <div>
+                <strong>Brand-safe styling</strong>
+                <span>The page keeps the Lytune shell, logo, and profile controls consistent with the rest of the app.</span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <p class="podcast-status" id="podcast-status">Loading podcasts from the Lytune backend...</p>
+
+        <section class="podcast-main">
+          <article class="panel-card">
+            <p class="section-kicker">Featured show</p>
+            <h3 class="section-title">Spotlight on what to hear next</h3>
+            <p class="section-copy">
+              Your strongest podcast recommendation leads the page here and gives listeners a clear first action.
+            </p>
+
+            <div class="feature-card" id="podcast-featured"></div>
+          </article>
+
+          <article class="panel-card">
+            <p class="section-kicker">Podcast lanes</p>
+            <h3 class="section-title">Built for different listening moods</h3>
+            <p class="section-copy">
+              Even before deeper backend categories exist, the page can still feel organized and intentional.
+            </p>
+
+            <div class="insight-grid">
+              <article class="insight-card">
+                <p class="feature-kicker">Music Stories</p>
+                <strong>Hear the context behind favorite records</strong>
+                <p>Perfect for interviews, breakdowns, and creative conversations around songs and artists.</p>
+              </article>
+
+              <article class="insight-card">
+                <p class="feature-kicker">Culture & Talk</p>
+                <strong>Stay with voices that feel current</strong>
+                <p>Strong for daily thoughts, social conversation, and easy listening beyond pure music playback.</p>
+              </article>
+
+              <article class="insight-card">
+                <p class="feature-kicker">Night Listening</p>
+                <strong>Slower energy for quiet sessions</strong>
+                <p>Good for the same users who move from playlists into thoughtful, lower-pressure spoken content.</p>
+              </article>
+            </div>
+          </article>
+        </section>
+
+        <section class="panel-card shows-card">
+          <p class="section-kicker">Trending shows</p>
+          <h3 class="section-title">What listeners can explore now</h3>
+          <p class="section-copy">
+            This grid updates from your backend endpoint and stays useful even if live podcast data cannot be reached.
+          </p>
+
+          <div class="podcast-grid" id="podcast-grid"></div>
+        </section>
+
+        <section class="panel-card">
+          <p class="section-kicker">Browse by vibe</p>
+          <h3 class="section-title">Podcast spaces inside Lytune</h3>
+          <p class="section-copy">
+            These categories make the page feel broader than a single list and help define what podcast listening means inside your app.
+          </p>
+
+          <div class="category-grid">
+            <article class="category-tile category-storytelling">
+              <span class="tile-label">Storytelling</span>
+              <span class="category-title">Behind the songs</span>
+              <span class="category-note">Artist journeys, recording moments, and the making of records people keep replaying.</span>
+            </article>
+
+            <article class="category-tile category-conversation">
+              <span class="tile-label">Conversation</span>
+              <span class="category-title">Talk & opinion</span>
+              <span class="category-note">Smart, relaxed discussion for listeners who want more than background sound.</span>
+            </article>
+
+            <article class="category-tile category-editorial">
+              <span class="tile-label">Editorial</span>
+              <span class="category-title">Weekly picks</span>
+              <span class="category-note">Quick roundups of the scenes, creators, and sounds shaping what is hot on Lytune.</span>
+            </article>
+
+            <article class="category-tile category-unwind">
+              <span class="tile-label">Unwind</span>
+              <span class="category-title">Late-night sessions</span>
+              <span class="category-note">Calm voices and slower stories for users easing out of an intense listening run.</span>
+            </article>
+          </div>
+        </section>
+
+        <footer class="podcast-footer">
+          <p class="footer-note">The Podcast page now behaves like part of the real product, not a placeholder.</p>
+          <a href="home.html" class="footer-link">Back to home</a>
+        </footer>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const avatar = document.getElementById("avatar");
+      const upload = document.getElementById("avatar-upload");
+      const username = document.getElementById("username");
+      const dropdown = document.getElementById("dropdown");
+      const changeNameButton = document.getElementById("change-name");
+      const logoutButton = document.getElementById("logout");
+      const podcastStatus = document.getElementById("podcast-status");
+      const podcastFeatured = document.getElementById("podcast-featured");
+      const podcastGrid = document.getElementById("podcast-grid");
+      const PODCAST_API_CANDIDATES = [
+        "http://lytune.localhost:3000/api/deezer/podcasts?limit=8",
+        "/api/deezer/podcasts?limit=8"
+      ];
+      const LOCAL_FALLBACK_PODCASTS = [
+        {
+          id: "local-podcast-1",
+          title: "Behind the Beat",
+          publisher: "Lytune Original",
+          description: "Conversations around modern music, creative process, and the stories behind breakout records.",
+          image: "assets/images/Album 11.png",
+          category: "Music Stories",
+          meta: "24 min average",
+          link: null
+        },
+        {
+          id: "local-podcast-2",
+          title: "Night Drive Talks",
+          publisher: "Lytune Sessions",
+          description: "Late-night reflections, calm interviews, and mood-driven listening for listeners winding down.",
+          image: "assets/images/Album 12.png",
+          category: "Chill Talk",
+          meta: "Weekly episodes",
+          link: null
+        },
+        {
+          id: "local-podcast-3",
+          title: "Pulse Check",
+          publisher: "Lytune Editorial",
+          description: "Quick updates on trending artists, new drops, and the songs shaping the week on Lytune.",
+          image: "assets/images/Album 4.png",
+          category: "New Releases",
+          meta: "15 min episodes",
+          link: null
+        },
+        {
+          id: "local-podcast-4",
+          title: "Studio Notes",
+          publisher: "Creator Room",
+          description: "A closer look at recording sessions, production choices, and how favorite records come together.",
+          image: "assets/images/Album 6.png",
+          category: "Behind the Scenes",
+          meta: "Twice a month",
+          link: null
+        }
+      ];
+
+      const escapeHtml = (value = "") =>
+        String(value).replace(/[&<>"']/g, (character) => {
+          const entities = {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            "\"": "&quot;",
+            "'": "&#39;"
+          };
+
+          return entities[character] || character;
+        });
+
+      const buildContentUrl = (id) =>
+        `content.html?type=podcast&id=${encodeURIComponent(id)}`;
+
+      const syncProfile = () => {
+        const savedAvatar = localStorage.getItem("avatar");
+        const savedName = localStorage.getItem("username");
+
+        if (savedAvatar) {
+          avatar.src = savedAvatar;
+        }
+
+        if (savedName) {
+          username.textContent = savedName;
+        }
+      };
+
+      const renderFeatured = (show) => {
+        if (!show) {
+          podcastFeatured.innerHTML = `
+            <div class="feature-media">
+              <img src="assets/images/logo.png" alt="Lytune">
+              <div>
+                <p class="feature-kicker">No featured show</p>
+                <h4 class="feature-title">Podcasts will appear here once data is available.</h4>
+                <p class="feature-description">The page is ready, but no podcast item was returned yet.</p>
+              </div>
+            </div>
+          `;
+          return;
+        }
+
+        const detailLink = `<a href="${buildContentUrl(show.id)}" class="primary-link">Open in Lytune</a>`;
+        const secondaryLink = show.link
+          ? `<a href="${escapeHtml(show.link)}" class="secondary-link" target="_blank" rel="noopener noreferrer">Open source link</a>`
+          : `<a href="search.html" class="secondary-link">Search more audio</a>`;
+
+        podcastFeatured.innerHTML = `
+          <div class="feature-media">
+            <img src="${escapeHtml(show.image)}" alt="${escapeHtml(show.title)}">
+            <div>
+              <p class="feature-kicker">${escapeHtml(show.category)}</p>
+              <h4 class="feature-title">${escapeHtml(show.title)}</h4>
+              <p class="feature-subtitle">${escapeHtml(show.publisher)}</p>
+              <p class="feature-description">${escapeHtml(show.description)}</p>
+              <div class="feature-meta">
+                <span class="meta-pill">${escapeHtml(show.meta)}</span>
+                <span class="meta-pill">${escapeHtml(show.category)}</span>
+              </div>
+              <div class="feature-actions">
+                ${detailLink}
+                ${secondaryLink}
+              </div>
+            </div>
+          </div>
+        `;
+      };
+
+      const renderPodcastGrid = (shows) => {
+        podcastGrid.innerHTML = "";
+
+        shows.forEach((show) => {
+          const card = document.createElement("a");
+          card.className = "podcast-card";
+          card.href = buildContentUrl(show.id);
+
+          card.innerHTML = `
+            <img src="${escapeHtml(show.image)}" alt="${escapeHtml(show.title)}">
+            <span class="tile-label">${escapeHtml(show.category)}</span>
+            <span class="podcast-title">${escapeHtml(show.title)}</span>
+            <span class="podcast-publisher">${escapeHtml(show.publisher)}</span>
+            <p class="podcast-description">${escapeHtml(show.description)}</p>
+            <div class="podcast-meta">
+              <span class="meta-pill">${escapeHtml(show.meta)}</span>
+            </div>
+          `;
+
+          podcastGrid.appendChild(card);
+        });
+      };
+
+      const renderPayload = (payload) => {
+        const shows = Array.isArray(payload.data) ? payload.data : [];
+        renderFeatured(payload.featured || shows[0] || null);
+        renderPodcastGrid(shows);
+        podcastStatus.textContent =
+          payload.source === "live"
+            ? `Showing live podcast picks from the backend. ${shows.length} show${shows.length === 1 ? "" : "s"} loaded.`
+            : `Showing saved podcast picks because live podcast data was not available. ${shows.length} show${shows.length === 1 ? "" : "s"} loaded.`;
+      };
+
+      const renderFallback = () => {
+        renderPayload({
+          source: "fallback",
+          featured: LOCAL_FALLBACK_PODCASTS[0],
+          data: LOCAL_FALLBACK_PODCASTS
+        });
+        podcastStatus.textContent = "Backend unavailable, so the Podcast page is showing saved Lytune content.";
+      };
+
+      const fetchWithTimeout = async (url, timeoutMs) => {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+        try {
+          return await fetch(url, { signal: controller.signal });
+        } finally {
+          clearTimeout(timeoutId);
+        }
+      };
+
+      const loadPodcasts = async () => {
+        let lastError = null;
+
+        for (const url of PODCAST_API_CANDIDATES) {
+          try {
+            const response = await fetchWithTimeout(url, 6500);
+            if (!response.ok) {
+              throw new Error(`Podcast request failed: ${response.status}`);
+            }
+
+            const payload = await response.json();
+            renderPayload(payload);
+            return;
+          } catch (error) {
+            lastError = error;
+          }
+        }
+
+        console.error("Podcast API unavailable:", lastError);
+        renderFallback();
+      };
+
+      syncProfile();
+      loadPodcasts();
+
+      avatar.addEventListener("click", (event) => {
+        event.stopPropagation();
+        dropdown.classList.toggle("show");
+      });
+
+      upload.addEventListener("change", function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function () {
+          avatar.src = reader.result;
+          localStorage.setItem("avatar", reader.result);
+        };
+
+        reader.readAsDataURL(file);
+        dropdown.classList.remove("show");
+      });
+
+      changeNameButton.addEventListener("click", () => {
+        const newName = prompt("Enter your name:", username.textContent);
+        if (!newName || !newName.trim()) return;
+
+        username.textContent = newName.trim();
+        localStorage.setItem("username", newName.trim());
+        dropdown.classList.remove("show");
+      });
+
+      logoutButton.addEventListener("click", () => {
+        localStorage.clear();
+        window.location.reload();
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!event.target.closest(".user-profile")) {
+          dropdown.classList.remove("show");
+        }
+      });
+    });
+  </script>
+  <script src="player.js"></script>
+</body>
+</html>

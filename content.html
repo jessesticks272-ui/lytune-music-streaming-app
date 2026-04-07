@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lytune Content</title>
+  <link rel="icon" href="assets/images/logo.png" sizes="32x32" type="image/png">
+  <link rel="stylesheet" href="content.css">
+  <link rel="stylesheet" href="player.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="assets/images/logo.png" alt="Lytune">
+        <h1 class="logo-title">Lytune</h1>
+      </div>
+
+      <nav>
+        <a href="home.html" class="nav-link">
+          <img src="assets/images/home button.png" class="nav-icon" alt="Home">
+          <span>Home</span>
+        </a>
+        <a href="search.html" class="nav-link">
+          <img src="assets/images/search bar.png" class="nav-icon" alt="Search">
+          <span>Search</span>
+        </a>
+        <a href="podcast.html" class="nav-link">
+          <img src="assets/images/podcast.png" class="nav-icon" alt="Podcasts">
+          <span>Podcast</span>
+        </a>
+        <a href="downloads.html" class="nav-link">
+          <img src="assets/images/Download.png" class="nav-icon" alt="Download">
+          <span>Download</span>
+        </a>
+        <a href="library.html" class="nav-link">
+          <img src="assets/images/bx_library.png" class="nav-icon" alt="Library">
+          <span>Library</span>
+        </a>
+      </nav>
+
+      <div class="user-profile">
+        <img src="assets/images/profile.png" id="avatar" alt="Avatar">
+
+        <div class="user-info">
+          <span class="username" id="username">Adeyemi Jesse</span>
+        </div>
+
+        <div class="dropdown" id="dropdown">
+          <a href="setting.html" class="dropdown-link">Settings</a>
+          <button type="button" id="change-name">Edit name</button>
+          <label for="avatar-upload">Change photo</label>
+          <button type="button" id="logout">Logout</button>
+        </div>
+
+        <input type="file" id="avatar-upload" accept="image/*">
+      </div>
+    </aside>
+
+    <main class="content">
+      <section class="detail-shell">
+        <p class="detail-status" id="detail-status">Loading content details from the Lytune backend...</p>
+
+        <section class="detail-hero" id="detail-hero"></section>
+
+        <section class="track-stage" id="track-stage" hidden>
+          <article class="panel-card player-card">
+            <div class="panel-heading">
+              <div>
+                <p class="related-kicker">Play in Lytune</p>
+                <h3 id="player-headline">Play this track</h3>
+              </div>
+              <span class="player-mode" id="playback-mode">Preview playback</span>
+            </div>
+
+            <p class="player-subline" id="player-subline">Track preview and tempo control live here.</p>
+
+            <div class="player-actions">
+              <button type="button" class="player-toggle" id="player-toggle">Play preview</button>
+              <div class="tempo-group" id="tempo-group"></div>
+            </div>
+
+            <div class="tempo-status" id="tempo-status">1.0x tempo</div>
+
+            <div class="progress-wrap">
+              <span id="current-time">0:00</span>
+              <input type="range" id="progress-range" min="0" max="30" value="0">
+              <span id="duration-time">0:30</span>
+            </div>
+
+            <div class="player-meta">
+              <span class="meta-pill">Private listening page</span>
+              <span class="meta-pill" id="bpm-pill" hidden></span>
+            </div>
+
+            <p class="player-status" id="player-status">Tap play to start the track preview.</p>
+            <p class="player-note" id="player-note">
+              Lytune uses the connected preview file when one is available. Full-length streaming can plug in later without changing this page.
+            </p>
+          </article>
+
+          <article class="panel-card action-card">
+            <div class="panel-heading">
+              <div>
+                <p class="related-kicker">Actions</p>
+                <h3>Keep this song close</h3>
+              </div>
+            </div>
+
+            <p class="action-copy">
+              Save the track into your library, keep it ready offline, or place it into a playlist without leaving the page.
+            </p>
+
+            <div class="action-grid">
+              <button type="button" class="action-tile" id="toggle-library-action">
+                <span class="action-label">Library</span>
+                <strong class="action-value" id="library-action-label">Save song</strong>
+              </button>
+
+              <button type="button" class="action-tile" id="toggle-download-action">
+                <span class="action-label">Downloads</span>
+                <strong class="action-value" id="download-action-label">Download song</strong>
+              </button>
+            </div>
+
+            <div class="playlist-stack">
+              <label class="moment-label" for="playlist-select">Add to playlist</label>
+              <select id="playlist-select">
+                <option value="">Choose a playlist</option>
+              </select>
+
+              <div class="playlist-actions">
+                <button type="button" class="secondary-link action-button compact-button" id="add-to-playlist">
+                  Add selected playlist
+                </button>
+              </div>
+
+              <label class="moment-label" for="new-playlist-title">Create playlist</label>
+              <input
+                id="new-playlist-title"
+                type="text"
+                maxlength="60"
+                placeholder="New playlist name"
+              >
+
+              <button type="button" class="secondary-link action-button compact-button" id="create-playlist">
+                Create playlist with this song
+              </button>
+            </div>
+
+            <p class="action-status" id="action-status">
+              Your song actions will show up here as soon as the track loads.
+            </p>
+          </article>
+
+          <article class="panel-card lyrics-card">
+            <div class="panel-heading">
+              <div>
+                <p class="related-kicker">Lyrics</p>
+                <h3>Words with the music</h3>
+              </div>
+            </div>
+
+            <p class="lyrics-status" id="lyrics-status">Open a song to load lyrics.</p>
+            <div class="lyrics-lines" id="lyrics-lines">
+              <p class="lyrics-empty">Lyrics show up here when they are available for the current track.</p>
+            </div>
+          </article>
+
+          <article class="panel-card moment-card" id="moment-card">
+            <div class="panel-heading">
+              <div>
+                <p class="related-kicker">Lytune Moment</p>
+                <h3>Keep the memory with the song</h3>
+              </div>
+            </div>
+
+            <p class="moment-copy" id="moment-copy">
+              Capture the room, mood, or reason this track matters today. Lytune keeps that note beside the music.
+            </p>
+
+            <div class="mood-grid">
+              <button type="button" class="mood-chip" data-mood="Night drive">Night drive</button>
+              <button type="button" class="mood-chip" data-mood="Soft landing">Soft landing</button>
+              <button type="button" class="mood-chip" data-mood="Locked in">Locked in</button>
+              <button type="button" class="mood-chip" data-mood="Healing">Healing</button>
+              <button type="button" class="mood-chip" data-mood="Churchy">Churchy</button>
+              <button type="button" class="mood-chip" data-mood="Hype">Hype</button>
+            </div>
+
+            <label class="moment-label" for="moment-note">Your note</label>
+            <textarea
+              id="moment-note"
+              maxlength="400"
+              placeholder="What was happening when this song hit right?"
+            ></textarea>
+
+            <div class="moment-actions">
+              <button type="button" class="primary-link action-button" id="save-moment">Save moment</button>
+              <span class="moment-status" id="moment-status">Save a note so this song keeps the memory beside it.</span>
+            </div>
+          </article>
+        </section>
+
+        <section class="detail-panels" id="detail-panels"></section>
+
+        <section class="related-section">
+          <div class="related-header">
+            <p class="related-kicker">Keep exploring</p>
+            <h3>More content inside Lytune</h3>
+          </div>
+          <div class="related-grid" id="related-grid"></div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script src="player.js"></script>
+  <script src="content.js"></script>
+</body>
+</html>

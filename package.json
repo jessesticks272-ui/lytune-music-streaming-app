@@ -1,0 +1,23 @@
+{
+  "name": "lytune",
+  "version": "1.0.0",
+  "description": "Lytune music streaming app prototype built with HTML, CSS, JavaScript, Node.js, and Express.",
+  "main": "choose-artist.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "music",
+    "streaming",
+    "express",
+    "nodejs",
+    "frontend"
+  ],
+  "author": "Lytune creator",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

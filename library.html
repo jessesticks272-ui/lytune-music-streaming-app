@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lytune Library</title>
+  <link rel="icon" href="assets/images/logo.png" sizes="32x32" type="image/png">
+  <link rel="stylesheet" href="library.css">
+  <link rel="stylesheet" href="player.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="assets/images/logo.png" alt="Lytune">
+        <h1 class="logo-title">Lytune</h1>
+      </div>
+
+      <nav>
+        <a href="home.html" class="nav-link">
+          <img src="assets/images/home button.png" class="nav-icon" alt="Home">
+          <span>Home</span>
+        </a>
+        <a href="search.html" class="nav-link">
+          <img src="assets/images/search bar.png" class="nav-icon" alt="Search">
+          <span>Search</span>
+        </a>
+        <a href="podcast.html" class="nav-link">
+          <img src="assets/images/podcast.png" class="nav-icon" alt="Podcasts">
+          <span>Podcast</span>
+        </a>
+        <a href="downloads.html" class="nav-link">
+          <img src="assets/images/Download.png" class="nav-icon" alt="Download">
+          <span>Download</span>
+        </a>
+        <a href="library.html" class="nav-link active" aria-current="page">
+          <img src="assets/images/bx_library.png" class="nav-icon" alt="Library">
+          <span>Library</span>
+        </a>
+      </nav>
+
+      <div class="user-profile">
+        <img src="assets/images/profile.png" id="avatar" alt="Avatar">
+
+        <div class="user-info">
+          <span class="username" id="username">Adeyemi Jesse</span>
+        </div>
+
+        <div class="dropdown" id="dropdown">
+          <a href="setting.html" class="dropdown-link">Settings</a>
+          <button type="button" id="change-name">Edit name</button>
+          <label for="avatar-upload">Change photo</label>
+          <button type="button" id="logout">Logout</button>
+        </div>
+
+        <input type="file" id="avatar-upload" accept="image/*">
+      </div>
+    </aside>
+
+    <main class="content">
+      <section class="library-shell">
+        <header class="library-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Your listening home</p>
+            <h2>Library</h2>
+            <p class="hero-text">
+              This page now behaves like a real streaming library. It keeps the Lytune shell, remembers your profile,
+              and gives saved music, podcasts, and creators a proper place before we connect the backend.
+            </p>
+
+            <div class="filter-row" aria-label="Library filters">
+              <button type="button" class="filter-chip active" data-library-filter="all" aria-pressed="true">All</button>
+              <button type="button" class="filter-chip" data-library-filter="music" aria-pressed="false">Music</button>
+              <button type="button" class="filter-chip" data-library-filter="podcast" aria-pressed="false">Podcasts</button>
+              <button type="button" class="filter-chip" data-library-filter="creator" aria-pressed="false">Creators</button>
+            </div>
+          </div>
+
+          <div class="hero-summary">
+            <article class="summary-card highlight">
+              <span class="summary-label">Saved collection</span>
+              <strong id="saved-count">128 items</strong>
+              <p>Liked tracks, albums, playlists, and podcasts collected in one place.</p>
+            </article>
+
+            <article class="summary-card">
+              <span class="summary-label">Recently active</span>
+              <strong id="recent-count">7 sessions</strong>
+              <p>Your latest listening runs stay visible so the page feels alive instead of empty.</p>
+            </article>
+
+            <article class="summary-card">
+              <span class="summary-label">Following</span>
+              <strong id="following-count">12 creators</strong>
+              <p>Artists and hosts you care about are grouped here for fast access.</p>
+            </article>
+          </div>
+        </header>
+
+        <p class="library-status" id="library-status">Loading your library from the Lytune backend...</p>
+
+        <section class="section-card">
+          <div class="section-header">
+            <div>
+              <p class="section-kicker">Pinned collections</p>
+              <h3>Jump back into your core spaces</h3>
+            </div>
+            <p class="section-copy">
+              These cards give the Library page a stronger first impression and create obvious entry points into saved Lytune content.
+            </p>
+          </div>
+
+          <div class="card-grid" id="pinned-grid">
+            <a href="content.html?type=playlist&id=local-playlist-1" class="media-card filterable" data-category="music">
+              <img src="assets/images/Album 11.png" alt="Afrobeats Pulse playlist">
+              <span class="card-tag">Playlist</span>
+              <strong>Afrobeats Pulse</strong>
+              <span>Lytune editorial mix built for your daily replay.</span>
+            </a>
+
+            <a href="content.html?type=track&id=local-track-2&autoplay=1" class="media-card filterable" data-category="music" data-track-id="local-track-2" data-track-title="Higher" data-track-subtitle="Burna Boy" data-track-image="assets/images/Album 2.png">
+              <img src="assets/images/Album 2.png" alt="Higher artwork">
+              <span class="card-tag">Liked song</span>
+              <strong>Higher</strong>
+              <span>Burna Boy still leads your most played rotation.</span>
+            </a>
+
+            <a href="content.html?type=podcast&id=local-podcast-1" class="media-card filterable" data-category="podcast">
+              <img src="assets/images/Album 11.png" alt="Behind the Beat artwork">
+              <span class="card-tag">Saved podcast</span>
+              <strong>Behind the Beat</strong>
+              <span>Lytune Original stories and music conversations you saved for later.</span>
+            </a>
+
+            <a href="content.html?type=artist&id=local-artist-1" class="media-card filterable" data-category="creator">
+              <img src="assets/artists/burnaboy.jpg" alt="Burna Boy portrait">
+              <span class="card-tag">Following</span>
+              <strong>Burna Boy</strong>
+              <span>Your library keeps favorite creators close, not buried in search.</span>
+            </a>
+          </div>
+        </section>
+
+        <section class="section-card split-layout">
+          <div class="stack-card">
+            <div class="section-header compact">
+              <div>
+                <p class="section-kicker">Recently played</p>
+                <h3>Sessions worth revisiting</h3>
+              </div>
+            </div>
+
+            <div class="session-list" id="recent-list">
+              <a href="content.html?type=album&id=local-album-2" class="session-row filterable" data-category="music">
+                <img src="assets/images/Album 7.png" alt="Late Checkout cover">
+                <div>
+                  <strong>Late Checkout</strong>
+                  <span>Ayra Starr • Album • Started 18 minutes ago</span>
+                </div>
+              </a>
+
+              <a href="content.html?type=track&id=local-track-4&autoplay=1" class="session-row filterable" data-category="music" data-track-id="local-track-4" data-track-title="Ozeba" data-track-subtitle="Rema" data-track-image="assets/images/Album 4.png">
+                <img src="assets/images/Album 4.png" alt="Ozeba cover">
+                <div>
+                  <strong>Ozeba</strong>
+                  <span>Rema • Track • In heavy rotation this week</span>
+                </div>
+              </a>
+
+              <a href="content.html?type=podcast&id=local-podcast-2" class="session-row filterable" data-category="podcast">
+                <img src="assets/images/Album 12.png" alt="Night Drive Talks cover">
+                <div>
+                  <strong>Night Drive Talks</strong>
+                  <span>Lytune Sessions • Podcast • Picked back up last night</span>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <div class="stack-card">
+            <div class="section-header compact">
+              <div>
+                <p class="section-kicker">Favorite creators</p>
+                <h3>People shaping your taste</h3>
+              </div>
+            </div>
+
+            <div class="creator-grid" id="creators-grid">
+              <a href="content.html?type=artist&id=local-artist-2" class="creator-card filterable" data-category="creator">
+                <img src="assets/artists/tems.png" alt="Tems portrait">
+                <strong>Tems</strong>
+                <span>Soulful, cinematic, and always replayable.</span>
+              </a>
+
+              <a href="content.html?type=artist&id=local-artist-3" class="creator-card filterable" data-category="creator">
+                <img src="assets/artists/rema.jpg" alt="Rema portrait">
+                <strong>Rema</strong>
+                <span>Your high-energy Afropop lane stays within reach.</span>
+              </a>
+
+              <a href="content.html?type=podcast&id=local-podcast-4" class="creator-card filterable" data-category="podcast">
+                <img src="assets/images/Album 6.png" alt="Studio Notes artwork">
+                <strong>Studio Notes</strong>
+                <span>Creator Room brings the making-of angle you keep saving.</span>
+              </a>
+
+              <a href="content.html?type=podcast&id=local-podcast-6" class="creator-card filterable" data-category="podcast">
+                <img src="assets/images/Album 10.png" alt="Mic Check Africa artwork">
+                <strong>Mic Check Africa</strong>
+                <span>Spotlights voices and scenes building the next wave.</span>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-card">
+          <div class="section-header">
+            <div>
+              <p class="section-kicker">Saved for later</p>
+              <h3>Your next few returns</h3>
+            </div>
+            <p class="section-copy">
+              This lane gives the Library screen a stronger “come back soon” feeling even before live user data is wired in.
+            </p>
+          </div>
+
+          <div class="vault-grid" id="vault-grid">
+            <article class="vault-card filterable" data-category="music">
+              <span class="vault-label">Queue</span>
+              <strong>Night drive sequence</strong>
+              <p>Tems, Omah Lay, and soft mood records stacked for later playback.</p>
+            </article>
+
+            <article class="vault-card filterable" data-category="podcast">
+              <span class="vault-label">Episodes</span>
+              <strong>3 unfinished stories</strong>
+              <p>Saved podcast episodes are waiting at the exact point where you paused.</p>
+            </article>
+
+            <article class="vault-card filterable" data-category="creator">
+              <span class="vault-label">Following</span>
+              <strong>Release alerts on</strong>
+              <p>Library is ready for future notifications once the backend handles follows and updates.</p>
+            </article>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const avatar = document.getElementById("avatar");
+      const upload = document.getElementById("avatar-upload");
+      const username = document.getElementById("username");
+      const dropdown = document.getElementById("dropdown");
+      const changeNameButton = document.getElementById("change-name");
+      const logoutButton = document.getElementById("logout");
+      const libraryStatus = document.getElementById("library-status");
+      const savedCount = document.getElementById("saved-count");
+      const recentCount = document.getElementById("recent-count");
+      const followingCount = document.getElementById("following-count");
+      const pinnedGrid = document.getElementById("pinned-grid");
+      const recentList = document.getElementById("recent-list");
+      const creatorsGrid = document.getElementById("creators-grid");
+      const vaultGrid = document.getElementById("vault-grid");
+      const filterButtons = document.querySelectorAll("[data-library-filter]");
+      const LIBRARY_API_CANDIDATES = [
+        "http://lytune.localhost:3000/api/library",
+        "/api/library"
+      ];
+      const LOCAL_LIBRARY_FALLBACK = {
+        summary: {
+          savedCount: 128,
+          recentSessions: 7,
+          followingCount: 12
+        },
+        pinned: [
+          {
+            id: "local-playlist-1",
+            type: "playlist",
+            category: "music",
+            tag: "Playlist",
+            title: "Afrobeats Pulse",
+            image: "assets/images/Album 11.png",
+            note: "Lytune editorial mix built for your daily replay.",
+            href: "content.html?type=playlist&id=local-playlist-1"
+          },
+          {
+            id: "local-track-2",
+            type: "track",
+            category: "music",
+            tag: "Liked song",
+            title: "Higher",
+            image: "assets/images/Album 2.png",
+            note: "Burna Boy still leads your most played rotation.",
+            href: "content.html?type=track&id=local-track-2&autoplay=1"
+          },
+          {
+            id: "local-podcast-1",
+            type: "podcast",
+            category: "podcast",
+            tag: "Saved podcast",
+            title: "Behind the Beat",
+            image: "assets/images/Album 11.png",
+            note: "Lytune Original stories and music conversations you saved for later.",
+            href: "content.html?type=podcast&id=local-podcast-1"
+          },
+          {
+            id: "local-artist-1",
+            type: "artist",
+            category: "creator",
+            tag: "Following",
+            title: "Burna Boy",
+            image: "assets/artists/burnaboy.jpg",
+            note: "Your library keeps favorite creators close, not buried in search.",
+            href: "content.html?type=artist&id=local-artist-1"
+          }
+        ],
+        recent: [
+          {
+            id: "local-album-2",
+            type: "album",
+            category: "music",
+            title: "Late Checkout",
+            image: "assets/images/Album 7.png",
+            note: "Ayra Starr • Album • Started 18 minutes ago",
+            href: "content.html?type=album&id=local-album-2"
+          },
+          {
+            id: "local-track-4",
+            type: "track",
+            category: "music",
+            title: "Ozeba",
+            image: "assets/images/Album 4.png",
+            note: "Rema • Track • In heavy rotation this week",
+            href: "content.html?type=track&id=local-track-4&autoplay=1"
+          },
+          {
+            id: "local-podcast-2",
+            type: "podcast",
+            category: "podcast",
+            title: "Night Drive Talks",
+            image: "assets/images/Album 12.png",
+            note: "Lytune Sessions • Podcast • Picked back up last night",
+            href: "content.html?type=podcast&id=local-podcast-2"
+          }
+        ],
+        creators: [
+          {
+            id: "local-artist-2",
+            type: "artist",
+            category: "creator",
+            title: "Tems",
+            image: "assets/artists/tems.png",
+            note: "Soulful, cinematic, and always replayable.",
+            href: "content.html?type=artist&id=local-artist-2"
+          },
+          {
+            id: "local-artist-3",
+            type: "artist",
+            category: "creator",
+            title: "Rema",
+            image: "assets/artists/rema.jpg",
+            note: "Your high-energy Afropop lane stays within reach.",
+            href: "content.html?type=artist&id=local-artist-3"
+          },
+          {
+            id: "local-podcast-4",
+            type: "podcast",
+            category: "podcast",
+            title: "Studio Notes",
+            image: "assets/images/Album 6.png",
+            note: "Creator Room brings the making-of angle you keep saving.",
+            href: "content.html?type=podcast&id=local-podcast-4"
+          },
+          {
+            id: "local-podcast-6",
+            type: "podcast",
+            category: "podcast",
+            title: "Mic Check Africa",
+            image: "assets/images/Album 10.png",
+            note: "Spotlights voices and scenes building the next wave.",
+            href: "content.html?type=podcast&id=local-podcast-6"
+          }
+        ],
+        vault: [
+          {
+            id: "vault-1",
+            category: "music",
+            label: "Queue",
+            title: "Night drive sequence",
+            description: "Tems, Omah Lay, and soft mood records stacked for later playback."
+          },
+          {
+            id: "vault-2",
+            category: "podcast",
+            label: "Episodes",
+            title: "3 unfinished stories",
+            description: "Saved podcast episodes are waiting at the exact point where you paused."
+          },
+          {
+            id: "vault-3",
+            category: "creator",
+            label: "Following",
+            title: "Release alerts on",
+            description: "Library is ready for future notifications once the backend handles follows and updates."
+          }
+        ]
+      };
+      let activeFilter = "all";
+
+      const syncName = (value) => {
+        username.textContent = value;
+      };
+
+      const syncAvatar = (value) => {
+        avatar.src = value;
+      };
+
+      const savedAvatar = localStorage.getItem("avatar");
+      const savedName = localStorage.getItem("username");
+
+      if (savedAvatar) {
+        syncAvatar(savedAvatar);
+      }
+
+      if (savedName) {
+        syncName(savedName);
+      }
+
+      avatar.addEventListener("click", (event) => {
+        event.stopPropagation();
+        dropdown.classList.toggle("show");
+      });
+
+      upload.addEventListener("change", function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function () {
+          syncAvatar(reader.result);
+          localStorage.setItem("avatar", reader.result);
+        };
+
+        reader.readAsDataURL(file);
+        dropdown.classList.remove("show");
+      });
+
+      changeNameButton.addEventListener("click", () => {
+        const newName = prompt("Enter your name:", username.textContent);
+        if (!newName || !newName.trim()) return;
+
+        const trimmedName = newName.trim();
+        syncName(trimmedName);
+        localStorage.setItem("username", trimmedName);
+        dropdown.classList.remove("show");
+      });
+
+      logoutButton.addEventListener("click", () => {
+        localStorage.clear();
+        window.location.reload();
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!event.target.closest(".user-profile")) {
+          dropdown.classList.remove("show");
+        }
+      });
+
+      const escapeHtml = (value = "") =>
+        value
+          .toString()
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/\"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+
+      const getCurrentUserContext = () => {
+        const displayName = localStorage.getItem("username") || "Guest Listener";
+        const email =
+          localStorage.getItem("userEmail") ||
+          localStorage.getItem("signupEmail") ||
+          displayName;
+
+        return {
+          user: email,
+          displayName
+        };
+      };
+
+      const renderEmptyState = (message) =>
+        `<div class="empty-state">${escapeHtml(message)}</div>`;
+
+      const renderPinnedItems = (items) => {
+        if (!items.length) {
+          pinnedGrid.innerHTML = renderEmptyState("Saved playlists, tracks, and podcasts will show here once your library starts growing.");
+          return;
+        }
+
+        pinnedGrid.innerHTML = items
+          .map(
+            (item) => `
+              <a href="${escapeHtml(item.href)}" class="media-card filterable" data-category="${escapeHtml(item.category)}"${
+                item.type === "track"
+                  ? ` data-track-id="${escapeHtml(item.id)}" data-track-title="${escapeHtml(item.title)}" data-track-subtitle="${escapeHtml(item.subtitle || item.note || "")}" data-track-image="${escapeHtml(item.image || "assets/images/logo.png")}"`
+                  : ""
+              }>
+                <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)} artwork">
+                <span class="card-tag">${escapeHtml(item.tag)}</span>
+                <strong>${escapeHtml(item.title)}</strong>
+                <span>${escapeHtml(item.note)}</span>
+              </a>
+            `
+          )
+          .join("");
+      };
+
+      const renderRecentItems = (items) => {
+        if (!items.length) {
+          recentList.innerHTML = renderEmptyState("Your recent listening sessions will appear here after you start playing music and podcasts.");
+          return;
+        }
+
+        recentList.innerHTML = items
+          .map(
+            (item) => `
+              <a href="${escapeHtml(item.href)}" class="session-row filterable" data-category="${escapeHtml(item.category)}"${
+                item.type === "track"
+                  ? ` data-track-id="${escapeHtml(item.id)}" data-track-title="${escapeHtml(item.title)}" data-track-subtitle="${escapeHtml(item.subtitle || item.note || "")}" data-track-image="${escapeHtml(item.image || "assets/images/logo.png")}"`
+                  : ""
+              }>
+                <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)} artwork">
+                <div>
+                  <strong>${escapeHtml(item.title)}</strong>
+                  <span>${escapeHtml(item.note)}</span>
+                </div>
+              </a>
+            `
+          )
+          .join("");
+      };
+
+      const renderCreatorItems = (items) => {
+        if (!items.length) {
+          creatorsGrid.innerHTML = renderEmptyState("Artists and hosts you follow will show up here once that backend state starts filling in.");
+          return;
+        }
+
+        creatorsGrid.innerHTML = items
+          .map(
+            (item) => `
+              <a href="${escapeHtml(item.href)}" class="creator-card filterable" data-category="${escapeHtml(item.category)}">
+                <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)} artwork">
+                <strong>${escapeHtml(item.title)}</strong>
+                <span>${escapeHtml(item.note)}</span>
+              </a>
+            `
+          )
+          .join("");
+      };
+
+      const renderVaultItems = (items) => {
+        if (!items.length) {
+          vaultGrid.innerHTML = renderEmptyState("Saved-for-later notes will appear here as your library grows.");
+          return;
+        }
+
+        vaultGrid.innerHTML = items
+          .map(
+            (item) => `
+              <article class="vault-card filterable" data-category="${escapeHtml(item.category)}">
+                <span class="vault-label">${escapeHtml(item.label)}</span>
+                <strong>${escapeHtml(item.title)}</strong>
+                <p>${escapeHtml(item.description)}</p>
+              </article>
+            `
+          )
+          .join("");
+      };
+
+      const applyLibraryPayload = (payload, sourceLabel) => {
+        savedCount.textContent = `${payload.summary.savedCount} items`;
+        recentCount.textContent = `${payload.summary.recentSessions} sessions`;
+        followingCount.textContent = `${payload.summary.followingCount} creators`;
+
+        renderPinnedItems(payload.pinned || []);
+        renderRecentItems(payload.recent || []);
+        renderCreatorItems(payload.creators || []);
+        renderVaultItems(payload.vault || []);
+
+        libraryStatus.textContent = sourceLabel;
+        applyFilter(activeFilter);
+      };
+
+      const loadLibrary = async () => {
+        const userContext = getCurrentUserContext();
+        let lastError = null;
+
+        for (const url of LIBRARY_API_CANDIDATES) {
+          try {
+            const response = await fetch(url, {
+              headers: {
+                "x-lytune-user": userContext.user,
+                "x-lytune-user-name": userContext.displayName
+              }
+            });
+
+            if (!response.ok) {
+              throw new Error(`Library request failed: ${response.status}`);
+            }
+
+            const payload = await response.json();
+            applyLibraryPayload(
+              payload.data || LOCAL_LIBRARY_FALLBACK,
+              `Loaded your Lytune library from the backend for ${userContext.displayName}.`
+            );
+            return;
+          } catch (error) {
+            lastError = error;
+          }
+        }
+
+        console.error("Library API unavailable:", lastError);
+        applyLibraryPayload(
+          LOCAL_LIBRARY_FALLBACK,
+          "Backend unavailable, so the Library page is showing saved local Lytune content."
+        );
+      };
+
+      const applyFilter = (filter) => {
+        activeFilter = filter;
+
+        filterButtons.forEach((button) => {
+          const isActive = button.dataset.libraryFilter === filter;
+          button.classList.toggle("active", isActive);
+          button.setAttribute("aria-pressed", String(isActive));
+        });
+
+        document.querySelectorAll(".filterable").forEach((item) => {
+          const category = item.dataset.category || "all";
+          const shouldShow = filter === "all" || category === filter;
+          item.classList.toggle("is-hidden", !shouldShow);
+        });
+      };
+
+      filterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyFilter(button.dataset.libraryFilter);
+        });
+      });
+
+      applyFilter("all");
+      loadLibrary();
+    });
+  </script>
+  <script src="player.js"></script>
+</body>
+</html>

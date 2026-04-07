@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lytune</title>
+  <link rel="icon" href="assets/images/logo.png" sizes="32x32" type="image/png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="background"></div>
+
+  <div class="login-card">
+    <img src="assets/images/logo.png" class="login-logo" alt="Lytune Logo">
+    <h1 class="app-ne">Lytune</h1>
+
+    <h2 class="title">SET YOUR DATE OF BIRTH</h2>
+
+    <form id="dobForm" action="username.html" class="dob-form">
+      <div class="dob">
+        <input id="birthMonth" type="text" placeholder="JANUARY" required>
+        <input id="birthDay" type="number" placeholder="1" min="1" max="31" required>
+        <input id="birthYear" type="number" placeholder="2011" min="1900" max="2026" required>
+      </div>
+
+      <button type="submit" class="btn">Continue</button>
+    </form>
+
+    <p class="agreement-text">
+      By clicking continue, you agree to our
+      <a href="terms.html">Terms of Service</a> and
+      <a href="privacy.html">Privacy Policy</a>
+    </p>
+  </div>
+
+  <script src="auth.js"></script>
+  <script>
+    document.getElementById("dobForm").addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const month = document.getElementById("birthMonth").value.trim().toUpperCase();
+      const day = document.getElementById("birthDay").value.trim();
+      const year = document.getElementById("birthYear").value.trim();
+
+      localStorage.setItem("birthMonth", month);
+      localStorage.setItem("birthDay", day);
+      localStorage.setItem("birthYear", year);
+
+      try {
+        window.LytuneAuth?.setMessage("", "neutral");
+        window.LytuneAuth?.showLoader();
+
+        if (localStorage.getItem("authToken") && window.LytuneAuth?.updateProfile) {
+          await window.LytuneAuth.updateProfile({
+            birthMonth: month,
+            birthDay: Number(day),
+            birthYear: Number(year)
+          });
+        }
+
+        window.location.href = "username.html";
+      } catch (error) {
+        window.LytuneAuth?.hideLoader();
+        window.LytuneAuth?.setMessage(error.message || "We could not save your date of birth.", "error");
+      }
+    });
+  </script>
+</body>
+</html>

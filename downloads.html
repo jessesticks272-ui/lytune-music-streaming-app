@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lytune Downloads</title>
+  <link rel="icon" href="assets/images/logo.png" sizes="32x32" type="image/png">
+  <link rel="stylesheet" href="download.css">
+  <link rel="stylesheet" href="player.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="assets/images/logo.png" alt="Lytune">
+        <h1 class="logo-title">Lytune</h1>
+      </div>
+
+      <nav>
+        <a href="home.html" class="nav-link">
+          <img src="assets/images/home button.png" class="nav-icon" alt="Home">
+          <span>Home</span>
+        </a>
+        <a href="search.html" class="nav-link">
+          <img src="assets/images/search bar.png" class="nav-icon" alt="Search">
+          <span>Search</span>
+        </a>
+        <a href="podcast.html" class="nav-link">
+          <img src="assets/images/podcast.png" class="nav-icon" alt="Podcasts">
+          <span>Podcast</span>
+        </a>
+        <a href="downloads.html" class="nav-link active" aria-current="page">
+          <img src="assets/images/Download.png" class="nav-icon" alt="Download">
+          <span>Download</span>
+        </a>
+        <a href="library.html" class="nav-link">
+          <img src="assets/images/bx_library.png" class="nav-icon" alt="Library">
+          <span>Library</span>
+        </a>
+      </nav>
+
+      <div class="user-profile">
+        <img src="assets/images/profile.png" id="avatar" alt="Avatar">
+
+        <div class="user-info">
+          <span class="username" id="username">Adeyemi Jesse</span>
+        </div>
+
+        <div class="dropdown" id="dropdown">
+          <a href="setting.html" class="dropdown-link">Settings</a>
+          <button type="button" id="change-name">Edit name</button>
+          <label for="avatar-upload">Change photo</label>
+          <button type="button" id="logout">Logout</button>
+        </div>
+
+        <input type="file" id="avatar-upload" accept="image/*">
+      </div>
+    </aside>
+
+    <main class="content">
+      <section class="downloads-shell">
+        <header class="downloads-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Offline listening</p>
+            <h2>Downloads</h2>
+            <p class="hero-text">
+              Your download page is now a full destination instead of a broken link. It feels like part of the real Lytune product,
+              with ready-offline cards, queue status, storage details, and room for the backend workflow we will wire next.
+            </p>
+
+            <div class="filter-row" aria-label="Download filters">
+              <button type="button" class="filter-chip active" data-download-filter="all" aria-pressed="true">All downloads</button>
+              <button type="button" class="filter-chip" data-download-filter="music" aria-pressed="false">Music</button>
+              <button type="button" class="filter-chip" data-download-filter="podcast" aria-pressed="false">Podcasts</button>
+              <button type="button" class="filter-chip" data-download-filter="queued" aria-pressed="false">Queued</button>
+            </div>
+          </div>
+
+          <div class="hero-summary">
+            <article class="summary-card highlight">
+              <span class="summary-label">Storage used</span>
+              <strong id="storage-used">3.2 GB</strong>
+              <p>Offline songs and episodes are grouped clearly so the page already feels useful.</p>
+            </article>
+
+            <article class="summary-card">
+              <span class="summary-label">Ready offline</span>
+              <strong id="ready-count">48 items</strong>
+              <p>Your strongest saved content is one tap away for flights, bad networks, or low-data mode.</p>
+            </article>
+
+            <article class="summary-card">
+              <span class="summary-label">Smart queue</span>
+              <strong id="queue-count">6 pending</strong>
+              <p>The queue section makes room for the real backend download states we will connect later.</p>
+            </article>
+          </div>
+        </header>
+
+        <p class="downloads-status" id="downloads-status">Loading your download state from the Lytune backend...</p>
+
+        <section class="section-card">
+          <div class="section-header">
+            <div>
+              <p class="section-kicker">Ready now</p>
+              <h3>Already saved for offline use</h3>
+            </div>
+            <p class="section-copy">
+              This grid gives the download page immediate value even before the actual file transfer logic is powered by backend data.
+            </p>
+          </div>
+
+          <div class="download-grid" id="downloads-grid">
+            <a href="content.html?type=track&id=local-track-1&autoplay=1" class="download-card filterable" data-category="music" data-track-id="local-track-1" data-track-title="Laho" data-track-subtitle="Shallipopi" data-track-image="assets/images/Album 1.png">
+              <img src="assets/images/Album 1.png" alt="Laho cover">
+              <div class="download-copy">
+                <span class="card-tag">Track • Offline</span>
+                <strong>Laho</strong>
+                <span>Shallipopi • Downloaded in high quality</span>
+              </div>
+            </a>
+
+            <a href="content.html?type=album&id=local-album-1" class="download-card filterable" data-category="music">
+              <img src="assets/images/Album 6.png" alt="Chart Run cover">
+              <div class="download-copy">
+                <span class="card-tag">Album • Offline</span>
+                <strong>Chart Run</strong>
+                <span>Asake • Cached for full offline listening</span>
+              </div>
+            </a>
+
+            <a href="content.html?type=podcast&id=local-podcast-3" class="download-card filterable" data-category="podcast">
+              <img src="assets/images/Album 4.png" alt="Pulse Check cover">
+              <div class="download-copy">
+                <span class="card-tag">Podcast • Offline</span>
+                <strong>Pulse Check</strong>
+                <span>Lytune Editorial • Latest episode stored on device</span>
+              </div>
+            </a>
+
+            <a href="content.html?type=podcast&id=local-podcast-5" class="download-card filterable" data-category="podcast">
+              <img src="assets/images/Album 8.jpg" alt="Soft Life Stories cover">
+              <div class="download-copy">
+                <span class="card-tag">Podcast • Offline</span>
+                <strong>Soft Life Stories</strong>
+                <span>Lytune Voices • Ready for lower-data playback</span>
+              </div>
+            </a>
+          </div>
+        </section>
+
+        <section class="section-card split-layout">
+          <div class="stack-card">
+            <div class="section-header compact">
+              <div>
+                <p class="section-kicker">Download queue</p>
+                <h3>Still processing</h3>
+              </div>
+            </div>
+
+            <div class="queue-list" id="queue-list">
+              <article class="queue-row filterable" data-category="queued">
+                <div class="queue-copy">
+                  <strong>Love Me JeJe</strong>
+                  <span>Tems • Waiting for stronger connection</span>
+                </div>
+                <span class="queue-status pending">Pending</span>
+              </article>
+
+              <article class="queue-row filterable" data-category="queued">
+                <div class="queue-copy">
+                  <strong>Mic Check Africa</strong>
+                  <span>Lytune Spotlight • Download paused at 68%</span>
+                </div>
+                <span class="queue-status active">Resuming</span>
+              </article>
+
+              <article class="queue-row filterable" data-category="queued">
+                <div class="queue-copy">
+                  <strong>Afrobeats Pulse</strong>
+                  <span>Lytune • Playlist batch waiting behind current jobs</span>
+                </div>
+                <span class="queue-status pending">Queued</span>
+              </article>
+            </div>
+          </div>
+
+          <div class="stack-card">
+            <div class="section-header compact">
+              <div>
+                <p class="section-kicker">Storage</p>
+                <h3>Space overview</h3>
+              </div>
+            </div>
+
+            <div class="meter-card">
+              <div class="meter-top">
+                <strong>Device usage</strong>
+                <span id="storage-detail">3.2 GB of 8 GB reserved</span>
+              </div>
+              <div class="meter-track">
+                <span class="meter-fill"></span>
+              </div>
+              <p>The layout is ready for real numbers once the backend begins tracking downloads by account and device.</p>
+            </div>
+
+            <div class="tip-list" id="tip-list">
+              <article class="tip-card">
+                <strong>Wi-Fi only</strong>
+                <span>Enabled for larger downloads and playlist batches.</span>
+              </article>
+
+              <article class="tip-card">
+                <strong>Smart cleanup</strong>
+                <span>Set to remove items not played in the last 21 days.</span>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-card">
+          <div class="section-header">
+            <div>
+              <p class="section-kicker">What comes next</p>
+              <h3>Backend-ready download states</h3>
+            </div>
+            <p class="section-copy">
+              The design already has clear places for finished, active, failed, and queued content so the next backend step can plug in cleanly.
+            </p>
+          </div>
+
+          <div class="status-grid" id="status-grid">
+            <article class="status-card">
+              <span class="card-tag">Finished</span>
+              <strong>Offline tracks and episodes</strong>
+              <p>These will become real saved files tied to the signed-in Lytune account.</p>
+            </article>
+
+            <article class="status-card">
+              <span class="card-tag">Queued</span>
+              <strong>Priority order and retries</strong>
+              <p>We can surface waiting jobs, pause states, and retry rules once the backend is active.</p>
+            </article>
+
+            <article class="status-card">
+              <span class="card-tag">Errors</span>
+              <strong>Failed download recovery</strong>
+              <p>The page is already shaped to show expired links, low storage, or broken network issues clearly.</p>
+            </article>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const avatar = document.getElementById("avatar");
+      const upload = document.getElementById("avatar-upload");
+      const username = document.getElementById("username");
+      const dropdown = document.getElementById("dropdown");
+      const changeNameButton = document.getElementById("change-name");
+      const logoutButton = document.getElementById("logout");
+      const downloadsStatus = document.getElementById("downloads-status");
+      const storageUsed = document.getElementById("storage-used");
+      const readyCount = document.getElementById("ready-count");
+      const queueCount = document.getElementById("queue-count");
+      const storageDetail = document.getElementById("storage-detail");
+      const downloadsGrid = document.getElementById("downloads-grid");
+      const queueList = document.getElementById("queue-list");
+      const tipList = document.getElementById("tip-list");
+      const statusGrid = document.getElementById("status-grid");
+      const filterButtons = document.querySelectorAll("[data-download-filter]");
+      const DOWNLOADS_API_CANDIDATES = [
+        "http://lytune.localhost:3000/api/downloads",
+        "/api/downloads"
+      ];
+      const LOCAL_DOWNLOADS_FALLBACK = {
+        summary: {
+          storageUsedGb: 3.2,
+          storageReservedGb: 8,
+          readyCount: 48,
+          queueCount: 6
+        },
+        ready: [
+          {
+            id: "local-track-1",
+            category: "music",
+            tag: "Track - Offline",
+            title: "Laho",
+            image: "assets/images/Album 1.png",
+            note: "Shallipopi - Downloaded in high quality",
+            href: "content.html?type=track&id=local-track-1&autoplay=1"
+          },
+          {
+            id: "local-album-1",
+            category: "music",
+            tag: "Album - Offline",
+            title: "Chart Run",
+            image: "assets/images/Album 6.png",
+            note: "Asake - Cached for full offline listening",
+            href: "content.html?type=album&id=local-album-1"
+          },
+          {
+            id: "local-podcast-3",
+            category: "podcast",
+            tag: "Podcast - Offline",
+            title: "Pulse Check",
+            image: "assets/images/Album 4.png",
+            note: "Lytune Editorial - Latest episode stored on device",
+            href: "content.html?type=podcast&id=local-podcast-3"
+          },
+          {
+            id: "local-podcast-5",
+            category: "podcast",
+            tag: "Podcast - Offline",
+            title: "Soft Life Stories",
+            image: "assets/images/Album 8.jpg",
+            note: "Lytune Voices - Ready for lower-data playback",
+            href: "content.html?type=podcast&id=local-podcast-5"
+          }
+        ],
+        queue: [
+          {
+            id: "local-track-3",
+            category: "queued",
+            title: "Love Me JeJe",
+            note: "Tems - Waiting for stronger connection",
+            status: "pending",
+            href: "content.html?type=track&id=local-track-3&autoplay=1"
+          },
+          {
+            id: "local-podcast-6",
+            category: "queued",
+            title: "Mic Check Africa",
+            note: "Lytune Spotlight - Download paused at 68%",
+            status: "active",
+            href: "content.html?type=podcast&id=local-podcast-6"
+          },
+          {
+            id: "local-playlist-1",
+            category: "queued",
+            title: "Afrobeats Pulse",
+            note: "Lytune - Playlist batch waiting behind current jobs",
+            status: "pending",
+            href: "content.html?type=playlist&id=local-playlist-1"
+          }
+        ],
+        settings: {
+          wifiOnly: true,
+          smartCleanupDays: 21
+        },
+        statusCards: [
+          {
+            id: "status-finished",
+            label: "Finished",
+            title: "Offline tracks and episodes",
+            description: "These will become real saved files tied to the signed-in Lytune account."
+          },
+          {
+            id: "status-queued",
+            label: "Queued",
+            title: "Priority order and retries",
+            description: "We can surface waiting jobs, pause states, and retry rules once the backend is active."
+          },
+          {
+            id: "status-errors",
+            label: "Errors",
+            title: "Failed download recovery",
+            description: "The page is already shaped to show expired links, low storage, or broken network issues clearly."
+          }
+        ]
+      };
+      let activeFilter = "all";
+
+      const syncName = (value) => {
+        username.textContent = value;
+      };
+
+      const syncAvatar = (value) => {
+        avatar.src = value;
+      };
+
+      const savedAvatar = localStorage.getItem("avatar");
+      const savedName = localStorage.getItem("username");
+
+      if (savedAvatar) {
+        syncAvatar(savedAvatar);
+      }
+
+      if (savedName) {
+        syncName(savedName);
+      }
+
+      avatar.addEventListener("click", (event) => {
+        event.stopPropagation();
+        dropdown.classList.toggle("show");
+      });
+
+      upload.addEventListener("change", function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function () {
+          syncAvatar(reader.result);
+          localStorage.setItem("avatar", reader.result);
+        };
+
+        reader.readAsDataURL(file);
+        dropdown.classList.remove("show");
+      });
+
+      changeNameButton.addEventListener("click", () => {
+        const newName = prompt("Enter your name:", username.textContent);
+        if (!newName || !newName.trim()) return;
+
+        const trimmedName = newName.trim();
+        syncName(trimmedName);
+        localStorage.setItem("username", trimmedName);
+        dropdown.classList.remove("show");
+      });
+
+      logoutButton.addEventListener("click", () => {
+        localStorage.clear();
+        window.location.reload();
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!event.target.closest(".user-profile")) {
+          dropdown.classList.remove("show");
+        }
+      });
+
+      const escapeHtml = (value = "") =>
+        value
+          .toString()
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/\"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+
+      const getCurrentUserContext = () => {
+        const displayName = localStorage.getItem("username") || "Guest Listener";
+        const email =
+          localStorage.getItem("userEmail") ||
+          localStorage.getItem("signupEmail") ||
+          displayName;
+
+        return {
+          user: email,
+          displayName
+        };
+      };
+
+      const renderEmptyState = (message) =>
+        `<div class="empty-state">${escapeHtml(message)}</div>`;
+
+      const renderReadyItems = (items) => {
+        if (!items.length) {
+          downloadsGrid.innerHTML = renderEmptyState("Offline songs and podcasts will show here once you start saving them.");
+          return;
+        }
+
+        downloadsGrid.innerHTML = items
+          .map(
+            (item) => `
+              <a href="${escapeHtml(item.href)}" class="download-card filterable" data-category="${escapeHtml(item.category)}"${
+                item.type === "track"
+                  ? ` data-track-id="${escapeHtml(item.id)}" data-track-title="${escapeHtml(item.title)}" data-track-subtitle="${escapeHtml(item.subtitle || item.note || "")}" data-track-image="${escapeHtml(item.image || "assets/images/logo.png")}"`
+                  : ""
+              }>
+                <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)} artwork">
+                <div class="download-copy">
+                  <span class="card-tag">${escapeHtml(item.tag)}</span>
+                  <strong>${escapeHtml(item.title)}</strong>
+                  <span>${escapeHtml(item.note)}</span>
+                </div>
+              </a>
+            `
+          )
+          .join("");
+      };
+
+      const renderQueueItems = (items) => {
+        if (!items.length) {
+          queueList.innerHTML = renderEmptyState("Your active download queue will show here once items are waiting to be saved offline.");
+          return;
+        }
+
+        queueList.innerHTML = items
+          .map(
+            (item) => `
+              <article class="queue-row filterable" data-category="${escapeHtml(item.category)}">
+                <div class="queue-copy">
+                  <strong>${escapeHtml(item.title)}</strong>
+                  <span>${escapeHtml(item.note)}</span>
+                </div>
+                <span class="queue-status ${escapeHtml(item.status)}">${escapeHtml(item.status)}</span>
+              </article>
+            `
+          )
+          .join("");
+      };
+
+      const renderTips = (settings) => {
+        tipList.innerHTML = `
+          <article class="tip-card">
+            <strong>Wi-Fi only</strong>
+            <span>${settings.wifiOnly ? "Enabled for larger downloads and playlist batches." : "Disabled so downloads can continue on mobile data."}</span>
+          </article>
+          <article class="tip-card">
+            <strong>Smart cleanup</strong>
+            <span>Set to remove items not played in the last ${escapeHtml(settings.smartCleanupDays)} days.</span>
+          </article>
+        `;
+      };
+
+      const renderStatusCards = (items) => {
+        if (!items.length) {
+          statusGrid.innerHTML = renderEmptyState("Download state cards will appear here once the backend starts tracking more offline scenarios.");
+          return;
+        }
+
+        statusGrid.innerHTML = items
+          .map(
+            (item) => `
+              <article class="status-card">
+                <span class="card-tag">${escapeHtml(item.label)}</span>
+                <strong>${escapeHtml(item.title)}</strong>
+                <p>${escapeHtml(item.description)}</p>
+              </article>
+            `
+          )
+          .join("");
+      };
+
+      const applyDownloadsPayload = (payload, sourceLabel) => {
+        storageUsed.textContent = `${payload.summary.storageUsedGb} GB`;
+        readyCount.textContent = `${payload.summary.readyCount} items`;
+        queueCount.textContent = `${payload.summary.queueCount} pending`;
+        storageDetail.textContent = `${payload.summary.storageUsedGb} GB of ${payload.summary.storageReservedGb} GB reserved`;
+
+        renderReadyItems(payload.ready || []);
+        renderQueueItems(payload.queue || []);
+        renderTips(payload.settings || { wifiOnly: true, smartCleanupDays: 21 });
+        renderStatusCards(payload.statusCards || []);
+
+        downloadsStatus.textContent = sourceLabel;
+        applyFilter(activeFilter);
+      };
+
+      const loadDownloads = async () => {
+        const userContext = getCurrentUserContext();
+        let lastError = null;
+
+        for (const url of DOWNLOADS_API_CANDIDATES) {
+          try {
+            const response = await fetch(url, {
+              headers: {
+                "x-lytune-user": userContext.user,
+                "x-lytune-user-name": userContext.displayName
+              }
+            });
+
+            if (!response.ok) {
+              throw new Error(`Downloads request failed: ${response.status}`);
+            }
+
+            const payload = await response.json();
+            applyDownloadsPayload(
+              payload.data || LOCAL_DOWNLOADS_FALLBACK,
+              `Loaded your offline state from the Lytune backend for ${userContext.displayName}.`
+            );
+            return;
+          } catch (error) {
+            lastError = error;
+          }
+        }
+
+        console.error("Downloads API unavailable:", lastError);
+        applyDownloadsPayload(
+          LOCAL_DOWNLOADS_FALLBACK,
+          "Backend unavailable, so the Downloads page is showing saved local Lytune content."
+        );
+      };
+
+      const applyFilter = (filter) => {
+        activeFilter = filter;
+
+        filterButtons.forEach((button) => {
+          const isActive = button.dataset.downloadFilter === filter;
+          button.classList.toggle("active", isActive);
+          button.setAttribute("aria-pressed", String(isActive));
+        });
+
+        document.querySelectorAll(".filterable").forEach((item) => {
+          const category = item.dataset.category || "all";
+          const shouldShow = filter === "all" || category === filter;
+          item.classList.toggle("is-hidden", !shouldShow);
+        });
+      };
+
+      filterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyFilter(button.dataset.downloadFilter);
+        });
+      });
+
+      applyFilter("all");
+      loadDownloads();
+    });
+  </script>
+  <script src="player.js"></script>
+</body>
+</html>

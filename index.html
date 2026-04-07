@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lytune</title>
+<link rel="icon" href="assets/images/logo.png" sizes="32x32" type="image/png">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<div class="background"></div>
+<div class="login-card" id="homecard">
+
+  <img src="assets/images/logo.png" class="login-logo" alt="Logo">
+  <h1 class="app-name">Lytune</h1>
+  <p class="tagline">Feel the beat. Live the moment.</p>
+  <a href="login.html" class="btn login-transparent">Login</a>
+  <a href="signup.html" class="btn dark">Sign Up</a>
+
+  <div class="divider">
+    <span>or continue with</span>
+  </div>
+
+  <button type="button" class="google-btn" data-google-auth data-auth-redirect="home.html">
+    <img src="assets/images/google.png" alt="Google Logo">
+    Google
+  </button>
+
+  <div class="agreement-text">
+    By clicking continue, you agree to our 
+    <a href="terms.html">Terms of Service</a> and 
+    <a href="privacy.html">Privacy Policy</a>
+  </div>
+
+</div>
+
+<script src="auth.js"></script>
+</body>
+</html>

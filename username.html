@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lytune</title>
+  <link rel="stylesheet" href="username.css">
+  <link rel="icon" href="assets/images/logo.png" sizes="128x128" type="image/png">
+</head>
+<body>
+  <div class="background"></div>
+
+  <div class="login-card" id="homecard">
+    <img src="assets/images/logo.png" class="login-logo" alt="Lytune Logo">
+    <h1 class="app-name">Lytune</h1>
+    <h2 class="title">Create a username</h2>
+    <p class="subtitle">Choose a name to continue.</p>
+
+    <form id="usernameForm" action="choose-artist.html">
+      <div class="form-box">
+        <input id="usernameInput" type="text" placeholder="Enter your username" required>
+        <button type="submit" class="btn dark">Continue</button>
+      </div>
+    </form>
+
+    <div class="agreement">
+      This name will appear on your profile.
+    </div>
+  </div>
+
+  <script src="auth.js"></script>
+  <script>
+    const usernameInput = document.getElementById("usernameInput");
+    const savedUsername = localStorage.getItem("username");
+    const signupEmail = localStorage.getItem("signupEmail");
+
+    if (savedUsername) {
+      usernameInput.value = savedUsername;
+    } else if (signupEmail) {
+      usernameInput.value = signupEmail.split("@")[0];
+    }
+
+    document.getElementById("usernameForm").addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const username = usernameInput.value.trim();
+      if (!username) {
+        usernameInput.focus();
+        return;
+      }
+
+      localStorage.setItem("username", username);
+
+      try {
+        window.LytuneAuth?.setMessage("", "neutral");
+        window.LytuneAuth?.showLoader();
+
+        if (localStorage.getItem("authToken") && window.LytuneAuth?.updateProfile) {
+          await window.LytuneAuth.updateProfile({
+            username
+          });
+        }
+
+        window.location.href = "choose-artist.html";
+      } catch (error) {
+        window.LytuneAuth?.hideLoader();
+        window.LytuneAuth?.setMessage(error.message || "We could not save your username.", "error");
+      }
+    });
+  </script>
+</body>
+</html>

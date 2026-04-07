@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lytune</title>
+  <link rel="icon" href="assets/images/logo.png" sizes="32x32" type="image/png">
+
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="player.css">
+</head>
+<body>
+
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="assets/images/logo.png" alt="Lytune">
+        <h1 class="logo-title">Lytune</h1>
+      </div>
+
+      <nav>
+     <a href="home.html" class="nav-link active">
+  <img src="assets/images/home button.png" class="nav-icon" alt="Home">
+  <span>Home</span>
+</a>
+
+       <a href="search.html" class="nav-link">
+  <img src="assets/images/search bar.png" class="nav-icon" alt="Search">
+  <span>Search</span>
+</a>
+
+      <a href="podcast.html" class="nav-link">
+        <img src="assets/images/podcast.png" class="nav-icon" alt="Podcasts">
+        <span>Podcast</span>
+      </a>
+      
+        <a href="downloads.html" class="nav-link">
+  <img src="assets/images/Download.png" class="nav-icon" alt="Download">
+  <span>Download</span>
+</a>
+
+        <a href="library.html" class="nav-link">
+  <img src="assets/images/bx_library.png" class="nav-icon" alt="Library">
+  <span>Library</span>
+</a>
+
+      </nav>
+ 
+    <div class="user-profile">
+
+      <img src="assets/images/profile.png" id="avatar" alt="Avatar">
+
+      <div class="user-info">
+        <span class="username" id="username">Adeyemi Jesse</span>
+      </div>
+
+     
+      <div class="dropdown" id="dropdown">
+        <a href="setting.html" class="dropdown-link">Settings</a>
+        <button id="change-name">Edit name</button>
+        <label for="avatar-upload">Change photo</label>
+        <button id="logout">Logout</button>
+        
+      </div>
+
+      <input type="file" id="avatar-upload" accept="image/*">
+
+    </div>
+
+  </aside>
+    <main class="content">
+      <div class="filters">
+        <button class="active" data-target="all">All</button>
+        <button data-target="music">Music</button>
+        <button data-target="podcasts">Podcasts</button>
+        <button data-target="audiobooks">Audiobooks</button>
+      </div>
+      <p class="deezer-status home-status" id="home-status" hidden></p>
+      <div class="card-row" id="top-cards" aria-busy="true">
+        <article class="small-card loading-card">
+          <div class="small-card-media loading-media"></div>
+          <span class="loading-line"></span>
+        </article>
+        <article class="small-card loading-card">
+          <div class="small-card-media loading-media"></div>
+          <span class="loading-line"></span>
+        </article>
+        <article class="small-card loading-card">
+          <div class="small-card-media loading-media"></div>
+          <span class="loading-line"></span>
+        </article>
+        <article class="small-card loading-card">
+          <div class="small-card-media loading-media"></div>
+          <span class="loading-line"></span>
+        </article>
+        <article class="small-card loading-card">
+          <div class="small-card-media loading-media"></div>
+          <span class="loading-line"></span>
+        </article>
+        <article class="small-card loading-card">
+          <div class="small-card-media loading-media"></div>
+          <span class="loading-line"></span>
+        </article>
+        <article class="small-card loading-card">
+          <div class="small-card-media loading-media"></div>
+          <span class="loading-line"></span>
+        </article>
+        <article class="small-card loading-card">
+          <div class="small-card-media loading-media"></div>
+          <span class="loading-line"></span>
+        </article>
+      </div>
+      <h2 id="podcasts">Picked for you</h2>
+      <div class="featured" id="picked-featured">
+        <p class="deezer-status">Loading picked content...</p>
+      </div>
+      <h2 id="music" class="section-link-heading">New releases for you</h2>
+      <div class="release-row deezer-list" id="audiobooks">
+        <p class="deezer-status">Loading albums...</p>
+      </div>
+      <h2 id="popular">Popular in Lytune</h2>
+      <div class="release-row deezer-list" id="deezer-popular-list">
+        <p class="deezer-status">Loading popular songs...</p>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="player.js"></script>
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const avatar = document.getElementById("avatar");
+  const upload = document.getElementById("avatar-upload");
+  const username = document.getElementById("username");
+  const dropdown = document.getElementById("dropdown");
+  const filterButtons = document.querySelectorAll(".filters button");
+  const homeStatus = document.getElementById("home-status");
+  const topCards = document.getElementById("top-cards");
+  const pickedFeatured = document.getElementById("picked-featured");
+  const albumsList = document.getElementById("audiobooks");
+  const deezerList = document.getElementById("deezer-popular-list");
+  const playButtons = new Map();
+  const LOCAL_FALLBACK_HOME = {
+    topTracks: [
+      {
+        id: "local-track-1",
+        title: "Laho",
+        link: null,
+        preview: null,
+        artist: { name: "Shallipopi" },
+        album: { cover_medium: "assets/images/Album 1.png" }
+      },
+      {
+        id: "local-track-2",
+        title: "Higher",
+        link: null,
+        preview: null,
+        artist: { name: "Burna Boy" },
+        album: { cover_medium: "assets/images/Album 2.png" }
+      },
+      {
+        id: "local-track-3",
+        title: "Love Me JeJe",
+        link: null,
+        preview: null,
+        artist: { name: "Tems" },
+        album: { cover_medium: "assets/images/Album 3.png" }
+      },
+      {
+        id: "local-track-4",
+        title: "Ozeba",
+        link: null,
+        preview: null,
+        artist: { name: "Rema" },
+        album: { cover_medium: "assets/images/Album 4.png" }
+      },
+      {
+        id: "local-track-5",
+        title: "Piece of My Heart",
+        link: null,
+        preview: null,
+        artist: { name: "Wizkid" },
+        album: { cover_medium: "assets/images/Album 5.png" }
+      }
+    ],
+    topAlbums: [
+      {
+        id: "local-album-1",
+        title: "Chart Run",
+        link: null,
+        cover_medium: "assets/images/Album 6.png",
+        artist: { name: "Asake" }
+      },
+      {
+        id: "local-album-2",
+        title: "Late Checkout",
+        link: null,
+        cover_medium: "assets/images/Album 7.png",
+        artist: { name: "Ayra Starr" }
+      },
+      {
+        id: "local-album-3",
+        title: "Summer Frequency",
+        link: null,
+        cover_medium: "assets/images/Album 8.jpg",
+        artist: { name: "Omah Lay" }
+      },
+      {
+        id: "local-album-4",
+        title: "Midnight Motion",
+        link: null,
+        cover_medium: "assets/images/Album 9.png",
+        artist: { name: "Fireboy DML" }
+      },
+      {
+        id: "local-album-5",
+        title: "City to City",
+        link: null,
+        cover_medium: "assets/images/Album 10.png",
+        artist: { name: "Joeboy" }
+      }
+    ],
+    topArtists: [
+      {
+        id: "local-artist-1",
+        name: "Burna Boy",
+        link: null,
+        picture_medium: "assets/artists/burnaboy.jpg"
+      },
+      {
+        id: "local-artist-2",
+        name: "Tems",
+        link: null,
+        picture_medium: "assets/artists/tems.png"
+      },
+      {
+        id: "local-artist-3",
+        name: "Rema",
+        link: null,
+        picture_medium: "assets/artists/rema.jpg"
+      }
+    ],
+    topPlaylists: [
+      {
+        id: "local-playlist-1",
+        title: "Afrobeats Pulse",
+        link: null,
+        picture_medium: "assets/images/Album 11.png",
+        user: { name: "Lytune" }
+      },
+      {
+        id: "local-playlist-2",
+        title: "Night Drive",
+        link: null,
+        picture_medium: "assets/images/Album 12.png",
+        user: { name: "Lytune" }
+      },
+      {
+        id: "local-playlist-3",
+        title: "Soft Life Mix",
+        link: null,
+        picture_medium: "assets/images/Album 4.png",
+        user: { name: "Lytune" }
+      }
+    ],
+    topPodcasts: [
+      {
+        id: "local-podcast-1",
+        title: "Behind the Beat",
+        link: null,
+        picture_medium: "assets/images/Album 3.png"
+      }
+    ]
+  };
+  
+
+
+  const savedAvatar = localStorage.getItem("avatar");
+  const savedName = localStorage.getItem("username");
+
+  if (savedAvatar) avatar.src = savedAvatar;
+  if (savedName) username.textContent = savedName;
+
+  
+  avatar.addEventListener("click", () => {
+    dropdown.classList.toggle("show");
+  });
+
+  upload.addEventListener("change", function () {
+    const file = this.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function () {
+      avatar.src = reader.result;
+      localStorage.setItem("avatar", reader.result);
+    };
+    reader.readAsDataURL(file);
+  });
+
+  document.getElementById("change-name").addEventListener("click", () => {
+    const newName = prompt("Enter your name:");
+    if (newName) {
+      username.textContent = newName;
+      localStorage.setItem("username", newName);
+    }
+  });
+
+
+  document.getElementById("logout").addEventListener("click", () => {
+    localStorage.clear();
+    location.reload();
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".user-profile")) {
+      dropdown.classList.remove("show");
+    }
+  });
+
+
+  filterButtons.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      filterButtons.forEach((btn) => btn.classList.remove("active"));
+      button.classList.add("active");
+
+      e.preventDefault();
+      const target = button.dataset.target;
+      if (target === "all") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        return;
+      }
+      const section = document.getElementById(target);
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  });
+
+  const setButtonState = (button, playing) => {
+    const playIcon =
+      '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M8 6v12l10-6z"></path></svg>';
+    const pauseIcon =
+      '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M7 6h4v12H7zm6 0h4v12h-4z"></path></svg>';
+    button.innerHTML = playing ? pauseIcon : playIcon;
+    button.setAttribute("aria-label", playing ? "Pause preview" : "Play preview");
+  };
+
+  const fetchWithTimeout = async (url, timeoutMs = 6000) => {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      return await fetch(url, { signal: controller.signal });
+    } finally {
+      clearTimeout(timeout);
+    }
+  };
+
+  const buildInternalContentUrl = (type, rawId) => {
+    if (rawId === undefined || rawId === null || !type) {
+      return "#";
+    }
+
+    const value = String(rawId).trim();
+    if (!value) {
+      return "#";
+    }
+
+    const resolvedId = /^\d+$/.test(value) ? `${type}-${value}` : value;
+    const query = new URLSearchParams({
+      type,
+      id: resolvedId
+    });
+
+    if (type === "track") {
+      query.set("autoplay", "1");
+    }
+
+    return `content.html?${query.toString()}`;
+  };
+
+  const createPlayButton = (previewUrl, contentUrl, link) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "hover-play-btn";
+    setButtonState(button, false);
+
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (contentUrl && contentUrl !== "#") {
+        window.location.href = contentUrl;
+        return;
+      }
+
+      if (link) {
+        window.open(link, "_blank", "noopener,noreferrer");
+      }
+    });
+
+    return button;
+  };
+
+  const syncPlayButtons = (playerState = window.LytunePlayer?.getState?.()) => {
+    playButtons.forEach((button, trackId) => {
+      const isPlaying =
+        Boolean(playerState?.playing) &&
+        Boolean(playerState?.track) &&
+        playerState.track.id === trackId;
+      setButtonState(button, isPlaying);
+    });
+  };
+
+  const createTrackPlayButton = (trackData, contentUrl, link) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "hover-play-btn";
+    setButtonState(button, false);
+    playButtons.set(trackData.id, button);
+
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (!window.LytunePlayer) {
+        if (contentUrl && contentUrl !== "#") {
+          window.location.href = contentUrl;
+          return;
+        }
+
+        if (link) {
+          window.open(link, "_blank", "noopener,noreferrer");
+        }
+        return;
+      }
+
+      window.LytunePlayer.toggle(
+        {
+          ...trackData,
+          contentUrl,
+          link
+        },
+        {
+          autoplay: Boolean(trackData.previewUrl)
+        }
+      )
+        .then((playerState) => {
+          syncPlayButtons(playerState);
+        })
+        .catch(() => {
+          syncPlayButtons();
+        });
+    });
+
+    return button;
+  };
+
+  const createMediaTile = (id, type, imageSrc, titleText, subtitleText, previewUrl, linkUrl) => {
+    const item = document.createElement("div");
+    item.className = "deezer-item";
+    const contentUrl = buildInternalContentUrl(type, id);
+
+    if (contentUrl !== "#") {
+      item.style.cursor = "pointer";
+      item.addEventListener("click", () => {
+        if (type === "track" && window.LytunePlayer) {
+          window.LytunePlayer.playTrack(
+            {
+              id: String(id),
+              type,
+              title: titleText,
+              subtitle: subtitleText,
+              image: imageSrc || "assets/images/logo.png",
+              previewUrl: previewUrl || null,
+              link: linkUrl || null,
+              contentUrl
+            },
+            {
+              autoplay: Boolean(previewUrl)
+            }
+          ).catch(() => {});
+          return;
+        }
+
+        window.location.href = contentUrl;
+      });
+    }
+
+    const mediaCover = document.createElement("div");
+    mediaCover.className = "media-cover";
+
+    const thumbLink = document.createElement("a");
+    thumbLink.href = contentUrl;
+    if (type === "track") {
+      thumbLink.dataset.trackId = String(id);
+      thumbLink.dataset.trackTitle = titleText || "Untitled";
+      thumbLink.dataset.trackSubtitle = subtitleText || "";
+      thumbLink.dataset.trackImage = imageSrc || "assets/images/logo.png";
+      thumbLink.dataset.trackPreview = previewUrl || "";
+      thumbLink.dataset.trackSource = linkUrl || "";
+    }
+
+    const img = document.createElement("img");
+    img.src = imageSrc || "assets/images/logo.png";
+    img.alt = titleText || "Lytune item";
+
+    const title = document.createElement("span");
+    title.className = "deezer-title";
+    title.textContent = titleText || "Untitled";
+
+    const subtitle = document.createElement("span");
+    subtitle.className = "deezer-artist";
+    subtitle.textContent = subtitleText || "";
+
+    thumbLink.appendChild(img);
+    mediaCover.appendChild(thumbLink);
+    mediaCover.appendChild(
+      type === "track"
+        ? createTrackPlayButton(
+            {
+              id: String(id),
+              type,
+              title: titleText,
+              subtitle: subtitleText,
+              image: imageSrc || "assets/images/logo.png",
+              previewUrl: previewUrl || null
+            },
+            contentUrl,
+            linkUrl || null
+          )
+        : createPlayButton(previewUrl, contentUrl, linkUrl || null)
+    );
+
+    item.appendChild(mediaCover);
+    item.appendChild(title);
+    item.appendChild(subtitle);
+    return item;
+  };
+
+  const createTopCard = (card) => {
+    const contentUrl = buildInternalContentUrl(card.type, card.id);
+    const item = contentUrl !== "#" ? document.createElement("a") : document.createElement("article");
+    item.className = "small-card";
+
+    if (contentUrl !== "#") {
+      item.href = contentUrl;
+      if (card.type === "track") {
+        item.dataset.trackId = String(card.id);
+        item.dataset.trackTitle = card.title || "Untitled";
+        item.dataset.trackSubtitle = card.subtitle || "";
+        item.dataset.trackImage = card.image || "assets/images/logo.png";
+        item.dataset.trackPreview = card.preview || "";
+        item.dataset.trackSource = card.link || "";
+      }
+    } else {
+      item.classList.add("is-static");
+    }
+
+    const media = document.createElement("div");
+    media.className = "small-card-media";
+
+    const img = document.createElement("img");
+    img.src = card.image || "assets/images/logo.png";
+    img.alt = card.title || "Top chart item";
+
+    const title = document.createElement("p");
+    title.textContent = card.title || "Untitled";
+
+    media.appendChild(img);
+    item.appendChild(media);
+    item.appendChild(title);
+    return item;
+  };
+
+  const getTopCardItems = (payload) => {
+    const tracks = (payload.topTracks || []).map((track) => ({
+      id: track.id,
+      type: "track",
+      title: track.title,
+      subtitle: track.artist?.name || "Artist",
+      image: track.album?.cover_medium,
+      link: track.link || null,
+      preview: track.preview || null
+    }));
+
+    const playlists = (payload.topPlaylists || []).map((playlist) => ({
+      id: playlist.id,
+      type: "playlist",
+      title: playlist.title,
+      image: playlist.picture_medium,
+      link: playlist.link || null
+    }));
+
+    const artists = (payload.topArtists || []).map((artist) => ({
+      id: artist.id,
+      type: "artist",
+      title: artist.name,
+      image: artist.picture_medium,
+      link: artist.link || null
+    }));
+
+    const albums = (payload.topAlbums || []).map((album) => ({
+      id: album.id,
+      type: "album",
+      title: album.title,
+      image: album.cover_medium,
+      link: album.link || null
+    }));
+
+    const primaryOrder = [
+      tracks[0],
+      playlists[0],
+      artists[0],
+      albums[0],
+      tracks[1],
+      playlists[1],
+      albums[1],
+      artists[1]
+    ];
+
+    const remaining = [
+      ...tracks.slice(2),
+      ...playlists.slice(2),
+      ...albums.slice(2),
+      ...artists.slice(2)
+    ];
+
+    const seen = new Set();
+    return [...primaryOrder, ...remaining].filter((card) => {
+      if (!card || seen.has(card.id)) {
+        return false;
+      }
+      seen.add(card.id);
+      return true;
+    }).slice(0, 8);
+  };
+
+  const renderTopCards = (payload) => {
+    topCards.innerHTML = "";
+    topCards.setAttribute("aria-busy", "false");
+    const cards = getTopCardItems(payload);
+
+    if (!cards.length) {
+      topCards.innerHTML = '<p class="deezer-status">No top charts available.</p>';
+      return;
+    }
+
+    cards.forEach((card) => {
+      topCards.appendChild(createTopCard(card));
+    });
+  };
+
+  const renderFeatured = (podcasts, playlists) => {
+    pickedFeatured.innerHTML = "";
+    const podcast = (podcasts || [])[0];
+    const playlist = (playlists || [])[0];
+    const picked = podcast || playlist;
+
+    if (!picked) {
+      pickedFeatured.innerHTML = '<p class="deezer-status">No featured content available.</p>';
+      return;
+    }
+
+    const image = document.createElement("img");
+    image.src = picked.picture_medium || "assets/images/logo.png";
+    image.alt = picked.title || "Featured";
+    const featuredType = podcast ? "podcast" : "playlist";
+    const contentUrl = buildInternalContentUrl(featuredType, picked.id);
+
+    const textWrap = document.createElement("div");
+    const tag = document.createElement("span");
+    tag.className = "tag";
+    tag.textContent = podcast ? "Podcast" : "Playlist";
+
+    const title = document.createElement("h3");
+    title.textContent = picked.title || "Featured";
+
+    const description = document.createElement("p");
+    description.textContent = picked.user?.name
+      ? `By ${picked.user.name}`
+      : "Trending now on Lytune.";
+
+    textWrap.appendChild(tag);
+    textWrap.appendChild(title);
+    textWrap.appendChild(description);
+
+    if (contentUrl !== "#") {
+      const wrapped = document.createElement("a");
+      wrapped.href = contentUrl;
+      wrapped.className = "deezer-card-link";
+      wrapped.appendChild(image);
+      wrapped.appendChild(textWrap);
+      pickedFeatured.appendChild(wrapped);
+      return;
+    }
+
+    pickedFeatured.appendChild(image);
+    pickedFeatured.appendChild(textWrap);
+  };
+
+  const renderAlbums = (albums) => {
+    albumsList.innerHTML = "";
+    const limitedAlbums = (albums || []).slice(0, 10);
+    if (!limitedAlbums.length) {
+      albumsList.innerHTML = '<p class="deezer-status">No albums available.</p>';
+      return;
+    }
+
+    limitedAlbums.forEach((album) => {
+      albumsList.appendChild(
+        createMediaTile(
+          album.id, // pass id
+          "album",  // pass type
+          album.cover_medium,
+          album.title,
+          album.artist?.name || "Album",
+          null,
+          album.link || null
+        )
+      );
+    });
+  };
+
+  const renderTracks = (tracks) => {
+    deezerList.innerHTML = "";
+    const limitedTracks = (tracks || []).slice(0, 10);
+    if (!limitedTracks.length) {
+      deezerList.innerHTML = '<p class="deezer-status">No tracks available.</p>';
+      return;
+    }
+
+    limitedTracks.forEach((track) => {
+      deezerList.appendChild(
+        createMediaTile(
+          track.id, // pass id
+          "track",  // pass type
+          track.album?.cover_medium,
+          track.title,
+          track.artist?.name || "Artist",
+          track.preview || null,
+          track.link || null
+        )
+      );
+    });
+  };
+
+  const renderHomePayload = (payload) => {
+    renderTopCards(payload);
+    renderFeatured(payload.topPodcasts, payload.topPlaylists);
+    renderAlbums(payload.topAlbums);
+    renderTracks(payload.topTracks);
+  };
+
+  const setHomeStatus = (message = "") => {
+    if (!message) {
+      homeStatus.hidden = true;
+      homeStatus.textContent = "";
+      return;
+    }
+
+    homeStatus.hidden = false;
+    homeStatus.textContent = message;
+  };
+
+  const getFallbackNotice = () => {
+    if (window.location.protocol === "file:") {
+      return "Showing saved demo content. Start the app with node server.js and open http://lytune.localhost:3000/home.html for live data.";
+    }
+
+    return "Showing saved demo content because live music data could not be reached.";
+  };
+
+  const renderLocalFallbackHome = (message) => {
+    renderHomePayload(LOCAL_FALLBACK_HOME);
+    setHomeStatus(message || getFallbackNotice());
+  };
+
+  const loadHomeFromDeezer = async () => {
+    const apiCandidates = [
+      "http://lytune.localhost:3000/api/deezer/home",
+      "/api/deezer/home"
+    ];
+
+    let lastError = null;
+    for (const url of apiCandidates) {
+      try {
+        const response = await fetchWithTimeout(url, 6000);
+        if (!response.ok) {
+          throw new Error(`API request failed: ${response.status}`);
+        }
+        const result = await response.json();
+        setHomeStatus("");
+        renderHomePayload(result);
+        return;
+      } catch (error) {
+        lastError = error;
+      }
+    }
+
+    console.error("Local Deezer API failed:", lastError);
+    await loadHomeDirectFromDeezer();
+  };
+
+  const loadHomeDirectFromDeezer = async () => {
+    try {
+      const urls = [
+        "https://api.deezer.com/chart/0/tracks?limit=10",
+        "https://api.deezer.com/chart/0/albums?limit=10",
+        "https://api.deezer.com/chart/0/artists?limit=6",
+        "https://api.deezer.com/chart/0/playlists?limit=6",
+        "https://api.deezer.com/chart/0/podcasts?limit=6"
+      ];
+
+      const responses = await Promise.all(urls.map((url) => fetchWithTimeout(url, 5000)));
+      const payloads = await Promise.all(
+        responses.map((response) => (response.ok ? response.json() : { data: [] }))
+      );
+
+      const [tracks, albums, artists, playlists, podcasts] = payloads.map(
+        (payload) => payload.data || []
+      );
+
+      if (!tracks.length && !albums.length && !artists.length && !playlists.length && !podcasts.length) {
+        throw new Error("No chart data returned.");
+      }
+
+      setHomeStatus("");
+      renderHomePayload({
+        topTracks: tracks,
+        topAlbums: albums,
+        topArtists: artists,
+        topPlaylists: playlists,
+        topPodcasts: podcasts
+      });
+    } catch (error) {
+      console.error("Direct Deezer load failed:", error);
+      renderLocalFallbackHome(getFallbackNotice());
+    }
+  };
+
+  if (window.LytunePlayer?.subscribe) {
+    window.LytunePlayer.subscribe((playerState) => {
+      syncPlayButtons(playerState);
+    });
+  }
+
+  loadHomeFromDeezer();
+
+  // Make "New releases for you" clickable
+  document.getElementById("music").addEventListener("click", function() {
+    albumsList.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+});
+</script>
+
+</body>
+</html>

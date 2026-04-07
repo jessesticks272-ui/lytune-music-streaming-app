@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lytune</title>
+  <link rel="icon" href="assets/images/logo.png" sizes="32x32" type="image/png">
+  <link rel="stylesheet" href="setting.css">
+  <link rel="stylesheet" href="player.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="assets/images/logo.png" alt="Lytune">
+        <h1 class="logo-title">Lytune</h1>
+      </div>
+
+      <nav>
+        <a href="home.html" class="nav-link">
+          <img src="assets/images/home button.png" class="nav-icon" alt="Home">
+          <span>Home</span>
+        </a>
+        <a href="search.html" class="nav-link">
+          <img src="assets/images/search bar.png" class="nav-icon" alt="Search">
+          <span>Search</span>
+        </a>
+        <a href="podcast.html" class="nav-link">
+          <img src="assets/images/podcast.png" class="nav-icon" alt="Podcasts">
+          <span>Podcast</span>
+        </a>
+        <a href="downloads.html" class="nav-link">
+          <img src="assets/images/Download.png" class="nav-icon" alt="Download">
+          <span>Download</span>
+        </a>
+        <a href="library.html" class="nav-link">
+          <img src="assets/images/bx_library.png" class="nav-icon" alt="Library">
+          <span>Library</span>
+        </a>
+      </nav>
+
+      <div class="user-profile">
+        <img src="assets/images/profile.png" id="avatar" alt="Avatar">
+
+        <div class="user-info">
+          <span class="username" id="username">Adeyemi Jesse</span>
+        </div>
+
+        <div class="dropdown" id="dropdown">
+          <a href="setting.html" class="dropdown-link current" aria-current="page">Settings</a>
+          <button type="button" id="change-name">Edit name</button>
+          <label for="avatar-upload">Change photo</label>
+          <button type="button" id="logout">Logout</button>
+        </div>
+
+        <input type="file" id="avatar-upload" accept="image/*">
+      </div>
+    </aside>
+
+    <main class="content">
+      <section class="settings-shell">
+        <header class="settings-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Lytune Control Room</p>
+            <h2>Settings</h2>
+            <p class="settings-copy">
+              A modern streaming-style settings page for your listeners. It keeps the clean control feel of popular music platforms,
+              while staying fully branded for Lytune with your logo, dark blue glow, and music-first identity.
+            </p>
+          </div>
+
+          <div class="hero-brand">
+            <img src="assets/images/logo.png" alt="Lytune logo">
+            <div>
+              <span class="brand-label">Powered by Lytune</span>
+              <strong class="brand-title">Music, podcasts, downloads, and discovery in one place.</strong>
+              <p class="brand-copy">
+                Lytune is built for smooth browsing, quick access to favorites, and a premium-feeling listening experience.
+              </p>
+            </div>
+          </div>
+        </header>
+
+        <div class="settings-layout">
+          <nav class="settings-menu" aria-label="Settings sections">
+            <p class="menu-title">Browse settings</p>
+            <a href="#account" class="settings-menu-link current">Account</a>
+            <a href="#playback" class="settings-menu-link">Playback</a>
+            <a href="#privacy" class="settings-menu-link">Privacy</a>
+            <a href="#downloads" class="settings-menu-link">Downloads</a>
+            <a href="#about" class="settings-menu-link">About Lytune</a>
+          </nav>
+
+          <div class="settings-panels">
+            <section class="settings-card featured-card" id="account">
+              <div class="section-header">
+                <p class="section-kicker">Account</p>
+                <h3>Your listener profile</h3>
+                <p>
+                  Manage the identity attached to your Lytune experience, from your profile image to the way your name appears
+                  across playlists, recommendations, and your library.
+                </p>
+              </div>
+
+              <div class="account-summary">
+                <img src="assets/images/profile.png" id="settings-avatar" alt="Profile preview">
+
+                <div>
+                  <p class="account-label">Signed in as</p>
+                  <h4 class="account-name" data-username>Adeyemi Jesse</h4>
+                  <p class="account-copy">
+                    Personalize your Lytune account from the avatar menu on the left to update your photo and display name.
+                  </p>
+                </div>
+
+                <div class="badge-row">
+                  <span class="status-pill">Lytune Free</span>
+                  <span class="status-pill subtle">Music + Podcasts</span>
+                </div>
+              </div>
+
+              <div class="settings-list">
+                <div class="setting-row">
+                  <div class="row-copy">
+                    <span class="row-label">Display name</span>
+                    <span class="row-detail">This is the name shown across your profile and any public-facing activity.</span>
+                  </div>
+                  <span class="row-value" data-username>Adeyemi Jesse</span>
+                </div>
+
+                <div class="setting-row">
+                  <div class="row-copy">
+                    <span class="row-label">Profile photo</span>
+                    <span class="row-detail">Keep your avatar synced with the image selected from the Lytune profile dropdown.</span>
+                  </div>
+                  <span class="row-value">Synced</span>
+                </div>
+
+                <div class="setting-row">
+                  <div class="row-copy">
+                    <span class="row-label">Plan</span>
+                    <span class="row-detail">Your current access level for streaming, downloads, and library features.</span>
+                  </div>
+                  <span class="row-value">Lytune Free</span>
+                </div>
+              </div>
+            </section>
+
+            <section class="settings-card" id="playback">
+              <div class="section-header">
+                <p class="section-kicker">Playback</p>
+                <h3>How Lytune sounds</h3>
+                <p>
+                  Shape the listening experience the way major streaming platforms do: smart autoplay, seamless transitions,
+                  and a smoother queue that keeps the session moving.
+                </p>
+              </div>
+
+              <div class="settings-list">
+                <div class="setting-row">
+                  <div class="row-copy">
+                    <span class="row-label">Autoplay similar songs</span>
+                    <span class="row-detail">Keep music flowing when your queue or selected project ends.</span>
+                  </div>
+                  <span class="toggle on">On</span>
+                </div>
+
+                <div class="setting-row">
+                  <div class="row-copy">
+                    <span class="row-label">Crossfade playback</span>
+                    <span class="row-detail">Blend tracks together for a smoother streaming feel.</span>
+                  </div>
+                  <span class="toggle">Off</span>
+                </div>
+
+                <div class="setting-row">
+                  <div class="row-copy">
+                    <span class="row-label">Normalize volume</span>
+                    <span class="row-detail">Balance louder and quieter songs so listening sessions feel more polished.</span>
+                  </div>
+                  <span class="toggle on">On</span>
+                </div>
+              </div>
+            </section>
+
+            <section class="settings-card" id="privacy">
+              <div class="section-header">
+                <p class="section-kicker">Privacy</p>
+                <h3>Private listening controls</h3>
+                <p>
+                  Give listeners the same sense of control they expect from top music apps, including quieter sessions and
+                  recommendation settings that feel personal without feeling exposed.
+                </p>
+              </div>
+
+              <div class="settings-list">
+                <div class="setting-row">
+                  <div class="row-copy">
+                    <span class="row-label">Private session</span>
+                    <span class="row-detail">Pause recommendation learning while you listen quietly.</span>
+                  </div>
+                  <span class="toggle">Off</span>
+                </div>
+
+                <div class="setting-row">
+                  <div class="row-copy">
+                    <span class="row-label">Listening activity visibility</span>
+                    <span class="row-detail">Control whether your current taste profile can be surfaced elsewhere in the app.</span>
+                  </div>
+                  <span class="toggle on">On</span>
+                </div>
+
+                <div class="setting-row">
+                  <div class="row-copy">
+                    <span class="row-label">Personalized recommendations</span>
+                    <span class="row-detail">Let Lytune tune picks around your recent artists, tracks, and saved library.</span>
+                  </div>
+                  <span class="toggle on">On</span>
+                </div>
+              </div>
+            </section>
+
+            <section class="settings-card" id="downloads">
+              <div class="section-header">
+                <p class="section-kicker">Downloads</p>
+                <h3>Offline and storage preferences</h3>
+                <p>
+                  Keep downloads manageable with clear limits and data-saving choices, especially for listeners who move between
+                  Wi-Fi and mobile data throughout the day.
+                </p>
+              </div>
+
+              <div class="settings-list">
+                <div class="setting-row">
+                  <div class="row-copy">
+                    <span class="row-label">Download over Wi-Fi only</span>
+                    <span class="row-detail">Protect mobile data while still keeping your library available offline.</span>
+                  </div>
+                  <span class="toggle on">On</span>
+                </div>
+
+                <div class="setting-row">
+                  <div class="row-copy">
+                    <span class="row-label">Audio quality for downloads</span>
+                    <span class="row-detail">Balance storage size with the listening quality you want from saved music.</span>
+                  </div>
+                  <span class="row-value">High</span>
+                </div>
+
+                <div class="setting-row">
+                  <div class="row-copy">
+                    <span class="row-label">Storage saver</span>
+                    <span class="row-detail">Reduce cache growth and keep the app lighter on shared devices.</span>
+                  </div>
+                  <span class="toggle">Off</span>
+                </div>
+              </div>
+            </section>
+
+            <section class="settings-card" id="about">
+              <div class="section-header">
+                <p class="section-kicker">About Lytune</p>
+                <h3>Your platform, your identity</h3>
+                <p>
+                  This area keeps the page branded around Lytune instead of feeling generic, so the settings page still looks
+                  connected to the rest of your product.
+                </p>
+              </div>
+
+              <div class="about-grid">
+                <article class="about-item">
+                  <span class="meta-label">Platform focus</span>
+                  <strong>Music-first streaming experience</strong>
+                  <p>Lytune combines music, podcasts, downloads, and saved libraries in one interface.</p>
+                </article>
+
+                <article class="about-item">
+                  <span class="meta-label">Visual identity</span>
+                  <strong>Blue glow, dark stage feel</strong>
+                  <p>Your settings screen now matches the richer night-mode atmosphere already used across the app.</p>
+                </article>
+
+                <article class="about-item">
+                  <span class="meta-label">Listener promise</span>
+                  <strong>Fast discovery and clean control</strong>
+                  <p>The layout is inspired by major streaming apps, but tuned to feel branded for Lytune.</p>
+                </article>
+
+                <article class="about-item">
+                  <span class="meta-label">Next expansion</span>
+                  <strong>Ready for real account controls</strong>
+                  <p>You can later connect these sections to live profile, privacy, and subscription data.</p>
+                </article>
+              </div>
+
+              <div class="settings-footer">
+                <p class="footer-note">Lytune settings now feel closer to a modern streaming product while keeping your own brand voice.</p>
+                <a href="home.html" class="footer-link">Back to home</a>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const avatar = document.getElementById("avatar");
+      const settingsAvatar = document.getElementById("settings-avatar");
+      const upload = document.getElementById("avatar-upload");
+      const username = document.getElementById("username");
+      const usernameTargets = document.querySelectorAll("[data-username]");
+      const dropdown = document.getElementById("dropdown");
+      const changeNameButton = document.getElementById("change-name");
+      const logoutButton = document.getElementById("logout");
+      const menuLinks = document.querySelectorAll(".settings-menu-link");
+      const sections = document.querySelectorAll(".settings-card[id]");
+
+      const syncName = (value) => {
+        username.textContent = value;
+        usernameTargets.forEach((target) => {
+          target.textContent = value;
+        });
+      };
+
+      const syncAvatar = (value) => {
+        avatar.src = value;
+        settingsAvatar.src = value;
+      };
+
+      const savedAvatar = localStorage.getItem("avatar");
+      const savedName = localStorage.getItem("username");
+
+      if (savedAvatar) {
+        syncAvatar(savedAvatar);
+      }
+
+      if (savedName) {
+        syncName(savedName);
+      }
+
+      avatar.addEventListener("click", (event) => {
+        event.stopPropagation();
+        dropdown.classList.toggle("show");
+      });
+
+      upload.addEventListener("change", function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function () {
+          syncAvatar(reader.result);
+          localStorage.setItem("avatar", reader.result);
+        };
+
+        reader.readAsDataURL(file);
+        dropdown.classList.remove("show");
+      });
+
+      changeNameButton.addEventListener("click", () => {
+        const newName = prompt("Enter your name:", username.textContent);
+        if (!newName || !newName.trim()) return;
+
+        const trimmedName = newName.trim();
+        syncName(trimmedName);
+        localStorage.setItem("username", trimmedName);
+        dropdown.classList.remove("show");
+      });
+
+      logoutButton.addEventListener("click", () => {
+        localStorage.clear();
+        window.location.reload();
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!event.target.closest(".user-profile")) {
+          dropdown.classList.remove("show");
+        }
+      });
+
+      const setCurrentSection = (id) => {
+        menuLinks.forEach((link) => {
+          const isCurrent = link.getAttribute("href") === "#" + id;
+          link.classList.toggle("current", isCurrent);
+        });
+      };
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const visibleSection = entries
+            .filter((entry) => entry.isIntersecting)
+            .sort((first, second) => second.intersectionRatio - first.intersectionRatio)[0];
+
+          if (visibleSection) {
+            setCurrentSection(visibleSection.target.id);
+          }
+        },
+        {
+          rootMargin: "-25% 0px -55% 0px",
+          threshold: [0.25, 0.45, 0.7]
+        }
+      );
+
+      sections.forEach((section) => observer.observe(section));
+
+      menuLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          const targetId = link.getAttribute("href").slice(1);
+          setCurrentSection(targetId);
+        });
+      });
+    });
+  </script>
+  <script src="player.js"></script>
+</body>
+</html>

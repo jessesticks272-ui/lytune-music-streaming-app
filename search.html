@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lytune</title>
+  <link rel="icon" href="assets/images/logo.png" sizes="32x32" type="image/png">
+  <link rel="stylesheet" href="search.css">
+  <link rel="stylesheet" href="player.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="assets/images/logo.png" alt="Lytune">
+        <h1 class="logo-title">Lytune</h1>
+      </div>
+
+      <nav>
+        <a href="home.html" class="nav-link">
+          <img src="assets/images/home button.png" class="nav-icon" alt="Home">
+          <span>Home</span>
+        </a>
+        <a href="search.html" class="nav-link active" aria-current="page">
+          <img src="assets/images/search bar.png" class="nav-icon" alt="Search">
+          <span>Search</span>
+        </a>
+        <a href="podcast.html" class="nav-link">
+          <img src="assets/images/podcast.png" class="nav-icon" alt="Podcasts">
+          <span>Podcast</span>
+        </a>
+        <a href="downloads.html" class="nav-link">
+          <img src="assets/images/Download.png" class="nav-icon" alt="Download">
+          <span>Download</span>
+        </a>
+        <a href="library.html" class="nav-link">
+          <img src="assets/images/bx_library.png" class="nav-icon" alt="Library">
+          <span>Library</span>
+        </a>
+      </nav>
+
+      <div class="user-profile">
+        <img src="assets/images/profile.png" id="avatar" alt="Avatar">
+
+        <div class="user-info">
+          <span class="username" id="username">Adeyemi Jesse</span>
+        </div>
+
+        <div class="dropdown" id="dropdown">
+          <a href="setting.html" class="dropdown-link">Settings</a>
+          <button type="button" id="change-name">Edit name</button>
+          <label for="avatar-upload">Change photo</label>
+          <button type="button" id="logout">Logout</button>
+        </div>
+
+        <input type="file" id="avatar-upload" accept="image/*">
+      </div>
+    </aside>
+
+    <main class="content">
+      <section class="search-shell">
+        <header class="search-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Search the sound of Lytune</p>
+            <h2>Find what you want to hear faster.</h2>
+            <p class="search-copy">
+              This page now works with the Lytune backend instead of only front-end demo filtering. You can browse categories,
+              search music and artists instantly, and keep the interface feeling closer to a real streaming platform.
+            </p>
+
+            <div class="hero-stats">
+              <span class="hero-stat">Tracks</span>
+              <span class="hero-stat">Artists</span>
+              <span class="hero-stat">Albums</span>
+              <span class="hero-stat">Podcasts</span>
+            </div>
+          </div>
+
+          <div class="hero-side">
+            <p class="section-kicker">Lytune search flow</p>
+            <h3 class="hero-side-title">Built for discovery</h3>
+            <p class="hero-side-copy">
+              The design keeps the clean energy of major streaming apps, but now the results come from your app server and can grow
+              into a real data layer over time.
+            </p>
+
+            <div class="hero-side-list">
+              <div>
+                <strong>Live backend search</strong>
+                <span>Results come from `/api/search` instead of staying trapped in the page.</span>
+              </div>
+              <div>
+                <strong>Browse genres</strong>
+                <span>Tap tiles to fill the search field with popular moods or names.</span>
+              </div>
+              <div>
+                <strong>Shared profile menu</strong>
+                <span>The avatar, name, and settings access still match Home and Settings.</span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <section class="search-toolbar" aria-label="Search controls">
+          <div class="search-input-wrap">
+            <img src="assets/images/search bar.png" alt="">
+            <input
+              type="search"
+              id="search-input"
+              placeholder="Search songs, artists, albums, podcasts..."
+              aria-label="Search songs, artists, albums, podcasts"
+            >
+            <button type="button" class="clear-btn" id="clear-search">Clear</button>
+          </div>
+
+          <div class="search-filters" id="search-filters">
+            <button type="button" class="filter-chip active" data-filter="all">All</button>
+            <button type="button" class="filter-chip" data-filter="track">Songs</button>
+            <button type="button" class="filter-chip" data-filter="artist">Artists</button>
+            <button type="button" class="filter-chip" data-filter="album">Albums</button>
+            <button type="button" class="filter-chip" data-filter="podcast">Podcasts</button>
+          </div>
+        </section>
+
+        <section class="search-grid">
+          <article class="search-card">
+            <p class="section-kicker">Top result</p>
+            <h3 class="section-title">Best match right now</h3>
+            <p class="section-copy">
+              The strongest result appears here first, with supporting matches on the right.
+            </p>
+
+            <div class="top-result-card show" id="top-result"></div>
+            <p class="empty-state" id="empty-state">
+              No matching results yet. Try another artist, song title, album, or tap one of the browse tiles below.
+            </p>
+          </article>
+
+          <article class="search-card">
+            <p class="section-kicker">Results</p>
+            <h3 class="section-title">Search matches</h3>
+            <p class="results-meta" id="results-meta">Connecting to the Lytune backend...</p>
+            <div class="results-grid" id="results-grid"></div>
+          </article>
+        </section>
+
+        <section class="search-card browse-card">
+          <p class="section-kicker">Browse all</p>
+          <h3 class="section-title">Jump into a mood or genre</h3>
+          <p class="section-copy">
+            These tiles keep Search feeling alive while your backend grows. Clicking one fills the search box and runs a backend query.
+          </p>
+
+          <div class="genre-grid">
+            <button type="button" class="genre-tile genre-tile-afrobeats" data-query="Afrobeats">
+              <span class="genre-label">Hot right now</span>
+              <span class="genre-title">Afrobeats</span>
+              <span class="genre-note">Big hooks, rhythm, and the energy driving Lytune discovery.</span>
+            </button>
+
+            <button type="button" class="genre-tile genre-tile-podcasts" data-query="Podcasts">
+              <span class="genre-label">Talk and stories</span>
+              <span class="genre-title">Podcasts</span>
+              <span class="genre-note">Find interviews, conversations, and fresh spoken content.</span>
+            </button>
+
+            <button type="button" class="genre-tile genre-tile-burna" data-query="Burna Boy">
+              <span class="genre-label">Artist picks</span>
+              <span class="genre-title">Burna Boy</span>
+              <span class="genre-note">Jump straight into a fan-favorite name from your library vibe.</span>
+            </button>
+
+            <button type="button" class="genre-tile genre-tile-releases" data-query="New releases">
+              <span class="genre-label">Fresh drops</span>
+              <span class="genre-title">New releases</span>
+              <span class="genre-note">Explore recent albums and current rotation energy.</span>
+            </button>
+          </div>
+        </section>
+
+        <footer class="search-footer">
+          <p>Search is now wired for backend results and ready to grow with the rest of the app.</p>
+          <a href="home.html" class="footer-link">Back to home</a>
+        </footer>
+      </section>
+    </main>
+  </div>
+
+  <script src="player.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const avatar = document.getElementById("avatar");
+      const upload = document.getElementById("avatar-upload");
+      const username = document.getElementById("username");
+      const dropdown = document.getElementById("dropdown");
+      const changeNameButton = document.getElementById("change-name");
+      const logoutButton = document.getElementById("logout");
+      const searchInput = document.getElementById("search-input");
+      const clearButton = document.getElementById("clear-search");
+      const resultsGrid = document.getElementById("results-grid");
+      const resultsMeta = document.getElementById("results-meta");
+      const topResult = document.getElementById("top-result");
+      const emptyState = document.getElementById("empty-state");
+      const filterButtons = document.querySelectorAll(".filter-chip");
+      const genreTiles = document.querySelectorAll(".genre-tile");
+      const SEARCH_API_CANDIDATES = [
+        "http://lytune.localhost:3000/api/search",
+        "/api/search"
+      ];
+
+      let activeFilter = "all";
+      let activeController = null;
+      let searchDebounceId = null;
+      let requestSequence = 0;
+
+      const formatType = (type) => {
+        if (type === "track") return "Song";
+        if (type === "artist") return "Artist";
+        if (type === "album") return "Album";
+        if (type === "playlist") return "Playlist";
+        return "Podcast";
+      };
+
+      const escapeHtml = (value = "") =>
+        String(value).replace(/[&<>"']/g, (character) => {
+          const entities = {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            "\"": "&quot;",
+            "'": "&#39;"
+          };
+
+          return entities[character] || character;
+        });
+
+      const buildContentUrl = (type, id) => {
+        const query = new URLSearchParams({
+          type,
+          id
+        });
+
+        if (type === "track") {
+          query.set("autoplay", "1");
+        }
+
+        return `content.html?${query.toString()}`;
+      };
+
+      const buildTrackDataset = (item) => {
+        if (!item || item.type !== "track") {
+          return "";
+        }
+
+        const attributes = {
+          "data-track-id": item.id,
+          "data-track-title": item.title,
+          "data-track-subtitle": item.subtitle || item.detail || "",
+          "data-track-image": item.image || "assets/images/logo.png",
+          "data-track-preview": item.preview || "",
+          "data-track-source": item.link || ""
+        };
+
+        return Object.entries(attributes)
+          .map(([key, value]) => `${key}="${escapeHtml(value || "")}"`)
+          .join(" ");
+      };
+
+      const syncProfile = () => {
+        const savedAvatar = localStorage.getItem("avatar");
+        const savedName = localStorage.getItem("username");
+
+        if (savedAvatar) {
+          avatar.src = savedAvatar;
+        }
+
+        if (savedName) {
+          username.textContent = savedName;
+        }
+      };
+
+      const setResultsMeta = (message) => {
+        resultsMeta.textContent = message;
+      };
+
+      const renderTopResult = (item) => {
+        if (!item) {
+          topResult.classList.remove("show");
+          topResult.innerHTML = "";
+          emptyState.classList.add("show");
+          return;
+        }
+
+        emptyState.classList.remove("show");
+        topResult.classList.add("show");
+        const detailUrl = buildContentUrl(item.type, item.id);
+        const trackDataset = buildTrackDataset(item);
+        const primaryActionLabel = item.type === "track" ? "Play in Lytune" : "Open in Lytune";
+        const detailsLink = item.type === "track"
+          ? `<a href="${detailUrl}" class="top-result-link" data-player-ignore="true">View details</a>`
+          : "";
+        const sourceLink = item.link
+          ? `<a href="${escapeHtml(item.link)}" class="top-result-link" target="_blank" rel="noopener noreferrer">Open source</a>`
+          : "";
+        topResult.innerHTML = `
+          <div class="top-result-media" ${trackDataset}>
+            <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}">
+            <div>
+              <span class="top-result-type">${escapeHtml(formatType(item.type))}</span>
+              <h4 class="top-result-title">${escapeHtml(item.title)}</h4>
+              <p class="top-result-subtitle">${escapeHtml(item.subtitle)}</p>
+              <div class="top-result-meta">
+                <span class="meta-pill">${escapeHtml(item.detail)}</span>
+              </div>
+              <div class="top-result-actions">
+                <a href="${detailUrl}" class="top-result-link" ${trackDataset}>${primaryActionLabel}</a>
+                ${detailsLink}
+                ${sourceLink}
+              </div>
+            </div>
+          </div>
+        `;
+      };
+
+      const renderBackendUnavailable = (query) => {
+        resultsGrid.innerHTML = "";
+        emptyState.textContent = query
+          ? `The Lytune backend could not be reached for "${query}". Start the server with node server.js and open http://lytune.localhost:3000.`
+          : "The Lytune backend could not be reached. Start the server with node server.js and open http://lytune.localhost:3000.";
+        setResultsMeta("Backend unavailable.");
+        renderTopResult(null);
+      };
+
+      const renderResults = (payload) => {
+        const items = Array.isArray(payload.data) ? payload.data : [];
+        const query = payload.query || "";
+        const sourceLabel = payload.source === "live" ? "live chart-backed" : "saved fallback";
+        resultsGrid.innerHTML = "";
+
+        if (!items.length) {
+          emptyState.textContent = query
+            ? `No results matched "${query}". Try another artist, song title, or genre.`
+            : "No results are available from the backend right now.";
+          setResultsMeta(
+            query
+              ? `No results matched "${query}".`
+              : "No results available right now."
+          );
+          renderTopResult(null);
+          return;
+        }
+
+        setResultsMeta(
+          query
+            ? `Showing ${payload.total} ${sourceLabel} result${payload.total === 1 ? "" : "s"} for "${query}".`
+            : `Showing ${payload.total} ${sourceLabel} search result${payload.total === 1 ? "" : "s"}.`
+        );
+
+        renderTopResult(items[0]);
+
+        items.forEach((item) => {
+          const card = document.createElement("a");
+          card.className = "result-card";
+          card.href = buildContentUrl(item.type, item.id);
+          if (item.type === "track") {
+            card.dataset.trackId = item.id;
+            card.dataset.trackTitle = item.title;
+            card.dataset.trackSubtitle = item.subtitle || item.detail || "";
+            card.dataset.trackImage = item.image || "assets/images/logo.png";
+            card.dataset.trackPreview = item.preview || "";
+            card.dataset.trackSource = item.link || "";
+          }
+
+          card.innerHTML = `
+            <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}">
+            <div class="result-copy">
+              <span class="result-type">${escapeHtml(formatType(item.type))}</span>
+              <span class="result-title">${escapeHtml(item.title)}</span>
+              <span class="result-subtitle">${escapeHtml(item.subtitle)} - ${escapeHtml(item.detail)}</span>
+            </div>
+          `;
+          resultsGrid.appendChild(card);
+        });
+      };
+
+      const fetchWithTimeout = async (url, timeoutMs, controller) => {
+        const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+        try {
+          return await fetch(url, { signal: controller.signal });
+        } finally {
+          clearTimeout(timeoutId);
+        }
+      };
+
+      const loadSearchResults = async () => {
+        const query = searchInput.value.trim();
+        const sequence = ++requestSequence;
+
+        if (activeController) {
+          activeController.abort();
+        }
+
+        activeController = new AbortController();
+        setResultsMeta(
+          query
+            ? `Searching Lytune for "${query}"...`
+            : "Loading search results from the Lytune backend..."
+        );
+
+        let lastError = null;
+
+        for (const baseUrl of SEARCH_API_CANDIDATES) {
+          try {
+            const params = new URLSearchParams({
+              query,
+              filter: activeFilter,
+              limit: "8"
+            });
+            const response = await fetchWithTimeout(
+              `${baseUrl}?${params.toString()}`,
+              6500,
+              activeController
+            );
+
+            if (!response.ok) {
+              throw new Error(`Search request failed: ${response.status}`);
+            }
+
+            const payload = await response.json();
+            if (sequence !== requestSequence) {
+              return;
+            }
+
+            renderResults(payload);
+            return;
+          } catch (error) {
+            if (error.name === "AbortError") {
+              return;
+            }
+
+            lastError = error;
+          }
+        }
+
+        if (sequence !== requestSequence) {
+          return;
+        }
+
+        console.error("Search API unavailable:", lastError);
+        renderBackendUnavailable(query);
+      };
+
+      const scheduleSearch = () => {
+        clearTimeout(searchDebounceId);
+        searchDebounceId = window.setTimeout(() => {
+          loadSearchResults();
+        }, 180);
+      };
+
+      syncProfile();
+      loadSearchResults();
+
+      avatar.addEventListener("click", (event) => {
+        event.stopPropagation();
+        dropdown.classList.toggle("show");
+      });
+
+      upload.addEventListener("change", function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function () {
+          avatar.src = reader.result;
+          localStorage.setItem("avatar", reader.result);
+        };
+
+        reader.readAsDataURL(file);
+        dropdown.classList.remove("show");
+      });
+
+      changeNameButton.addEventListener("click", () => {
+        const newName = prompt("Enter your name:", username.textContent);
+        if (!newName || !newName.trim()) return;
+
+        username.textContent = newName.trim();
+        localStorage.setItem("username", newName.trim());
+        dropdown.classList.remove("show");
+      });
+
+      logoutButton.addEventListener("click", () => {
+        localStorage.clear();
+        window.location.reload();
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!event.target.closest(".user-profile")) {
+          dropdown.classList.remove("show");
+        }
+      });
+
+      searchInput.addEventListener("input", scheduleSearch);
+
+      clearButton.addEventListener("click", () => {
+        searchInput.value = "";
+        searchInput.focus();
+        loadSearchResults();
+      });
+
+      filterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          activeFilter = button.dataset.filter;
+          filterButtons.forEach((chip) => chip.classList.remove("active"));
+          button.classList.add("active");
+          loadSearchResults();
+        });
+      });
+
+      genreTiles.forEach((tile) => {
+        tile.addEventListener("click", () => {
+          searchInput.value = tile.dataset.query;
+          searchInput.focus();
+          activeFilter = "all";
+          filterButtons.forEach((chip) => {
+            chip.classList.toggle("active", chip.dataset.filter === "all");
+          });
+          loadSearchResults();
+        });
+      });
+    });
+  </script>
+</body>
+</html>

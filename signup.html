@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lytune</title>
+  <link rel="icon" href="assets/images/logo.png" sizes="32x32" type="image/png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="background"></div>
+
+  <div class="login-card">
+    <img src="assets/images/logo.png" class="login-logo" alt="Lytune Logo">
+    <h1 class="app-name">Lytune</h1>
+
+    <h2 class="title">Create an account</h2>
+    <p class="subtitle">Enter your email to sign up for this app</p>
+
+    <form id="signupForm" action="dob.html" data-auth-form="signup" data-auth-redirect="dob.html">
+      <div class="form-box">
+        <input id="signupEmail" type="email" placeholder="email@domain.com" autocomplete="email" required>
+        <input id="signupPassword" type="password" placeholder="Password" autocomplete="new-password" minlength="8" required>
+        <button type="submit" class="btn dark">Continue</button>
+      </div>
+    </form>
+
+    <div class="divider">
+      <span>or continue with</span>
+    </div>
+
+    <button type="button" class="google-btn" data-google-auth data-auth-redirect="dob.html">
+      <img src="assets/images/google.png" alt="Google logo">
+      Google
+    </button>
+
+    <p class="agreement-text">
+      By clicking continue, you agree to our
+      <a href="terms.html">Terms of Service</a> and
+      <a href="privacy.html">Privacy Policy</a>
+    </p>
+
+    <p class="agreement">
+      Already have an account?
+      <a href="login.html">Log in</a>
+    </p>
+  </div>
+  <script src="auth.js"></script>
+</body>
+</html>

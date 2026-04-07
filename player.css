@@ -1,0 +1,426 @@
+:root {
+  --lytune-player-left: 0px;
+  --player-bar-bg: rgba(14, 14, 17, 0.98);
+  --player-bar-border: rgba(255, 255, 255, 0.08);
+  --player-bar-text: #f5f7fb;
+  --player-bar-muted: #9aa3b2;
+  --player-bar-accent: #ff365d;
+  --player-bar-panel: rgba(255, 255, 255, 0.06);
+}
+
+body.has-lytune-player {
+  padding-bottom: 112px;
+}
+
+.lytune-player-shell {
+  position: fixed;
+  left: var(--lytune-player-left);
+  right: 0;
+  bottom: 0;
+  z-index: 90;
+  display: none;
+  align-items: center;
+  gap: 28px;
+  min-height: 98px;
+  padding: 16px 22px 14px;
+  border-top: 1px solid var(--player-bar-border);
+  background:
+    radial-gradient(circle at top center, rgba(255, 54, 93, 0.16), transparent 34%),
+    linear-gradient(180deg, rgba(29, 30, 35, 0.98) 0%, rgba(10, 10, 12, 0.99) 100%);
+  box-shadow:
+    0 -18px 44px rgba(0, 0, 0, 0.46),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(18px);
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.lytune-player-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.34), transparent);
+  opacity: 0.8;
+}
+
+.lytune-player-shell.show {
+  display: flex;
+}
+
+.lytune-player-track {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+  flex: 1 1 310px;
+  max-width: 390px;
+  order: 1;
+}
+
+.lytune-player-art {
+  width: 62px;
+  height: 62px;
+  border-radius: 16px;
+  object-fit: cover;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 14px 24px rgba(0, 0, 0, 0.32),
+    0 0 0 1px rgba(255, 255, 255, 0.07);
+  flex-shrink: 0;
+}
+
+.lytune-player-copy {
+  min-width: 0;
+}
+
+.lytune-player-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #d7dde7;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.lytune-player-kicker::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--player-bar-accent);
+  box-shadow: 0 0 0 4px rgba(255, 54, 93, 0.14);
+}
+
+.lytune-player-shell.is-playing .lytune-player-kicker::before {
+  animation: lytune-player-pulse 1.8s infinite;
+}
+
+.lytune-player-note {
+  display: none;
+}
+
+.lytune-player-title {
+  display: block;
+  color: var(--player-bar-text);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lytune-player-subtitle {
+  display: block;
+  margin-top: 6px;
+  color: #b6bfcc;
+  font-size: 13px;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lytune-player-center {
+  display: flex;
+  flex: 1 1 520px;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  min-width: 320px;
+  order: 2;
+}
+
+.lytune-player-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.lytune-player-button,
+.lytune-player-speed,
+.lytune-player-close,
+.lytune-player-link {
+  border: 0;
+  background: transparent;
+  color: var(--player-bar-text);
+  text-decoration: none;
+  transition:
+    transform 180ms ease,
+    background-color 180ms ease,
+    box-shadow 180ms ease,
+    opacity 180ms ease;
+}
+
+.lytune-player-button,
+.lytune-player-speed,
+.lytune-player-close {
+  cursor: pointer;
+}
+
+.lytune-player-button.primary {
+  width: 52px;
+  height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ffffff 0%, #e6e9ef 100%);
+  color: #101014;
+  box-shadow:
+    0 14px 24px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.lytune-player-shell.is-playing .lytune-player-button.primary {
+  background: linear-gradient(135deg, #ff7a93 0%, #ff365d 100%);
+  color: #ffffff;
+}
+
+.lytune-player-progress {
+  display: grid;
+  grid-template-columns: 42px minmax(160px, 1fr) 42px;
+  gap: 12px;
+  align-items: center;
+  width: min(100%, 540px);
+  color: var(--player-bar-muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.lytune-player-progress input {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 18px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  accent-color: #ffffff;
+}
+
+.lytune-player-progress input::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.28));
+}
+
+.lytune-player-progress input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  margin-top: -4px;
+  border: 0;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.12);
+}
+
+.lytune-player-progress input::-moz-range-track {
+  height: 4px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.28));
+}
+
+.lytune-player-progress input::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: 0;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.12);
+}
+
+.lytune-player-side {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex: 0 0 auto;
+  margin-left: auto;
+  order: 3;
+}
+
+.lytune-player-speed,
+.lytune-player-link,
+.lytune-player-close {
+  min-height: 38px;
+  padding: 0 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--player-bar-panel);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  color: var(--player-bar-text);
+}
+
+.lytune-player-speed {
+  min-width: 62px;
+  font-weight: 700;
+}
+
+.lytune-player-link {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.lytune-player-close {
+  width: 38px;
+  padding: 0;
+  font-size: 18px;
+}
+
+.lytune-player-shell button:hover:not(:disabled),
+.lytune-player-shell a:hover {
+  transform: translateY(-1px);
+}
+
+.lytune-player-speed:hover,
+.lytune-player-link:hover,
+.lytune-player-close:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.lytune-player-shell button:focus-visible,
+.lytune-player-shell a:focus-visible,
+.lytune-player-shell input:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.9);
+  outline-offset: 2px;
+}
+
+.lytune-player-shell button:disabled,
+.lytune-player-shell input:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@keyframes lytune-player-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 4px rgba(255, 54, 93, 0.14);
+  }
+
+  50% {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 7px rgba(255, 54, 93, 0.06);
+  }
+}
+
+@media (max-width: 1180px) {
+  .lytune-player-shell {
+    gap: 20px;
+    padding-inline: 16px;
+  }
+
+  .lytune-player-track {
+    max-width: 330px;
+  }
+
+  .lytune-player-center {
+    min-width: 280px;
+  }
+}
+
+@media (max-width: 860px) {
+  body.has-lytune-player {
+    padding-bottom: 182px;
+  }
+
+  .lytune-player-shell {
+    left: 0;
+    flex-wrap: wrap;
+    gap: 14px;
+    min-height: auto;
+    padding: 14px;
+  }
+
+  .lytune-player-track,
+  .lytune-player-center,
+  .lytune-player-side {
+    flex: 1 1 100%;
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+  }
+
+  .lytune-player-center {
+    align-items: stretch;
+    min-width: 0;
+  }
+
+  .lytune-player-controls {
+    justify-content: flex-start;
+  }
+
+  .lytune-player-progress {
+    width: 100%;
+  }
+
+  .lytune-player-side {
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 540px) {
+  body.has-lytune-player {
+    padding-bottom: 198px;
+  }
+
+  .lytune-player-shell {
+    padding: 12px;
+  }
+
+  .lytune-player-track {
+    gap: 12px;
+  }
+
+  .lytune-player-art {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+  }
+
+  .lytune-player-kicker {
+    margin-bottom: 6px;
+    padding-inline: 8px;
+    letter-spacing: 0.14em;
+  }
+
+  .lytune-player-title {
+    font-size: 14px;
+  }
+
+  .lytune-player-subtitle {
+    font-size: 12px;
+  }
+
+  .lytune-player-center {
+    gap: 8px;
+  }
+
+  .lytune-player-progress {
+    grid-template-columns: 38px minmax(0, 1fr) 38px;
+    gap: 8px;
+  }
+
+  .lytune-player-side {
+    gap: 8px;
+  }
+
+  .lytune-player-speed,
+  .lytune-player-link {
+    min-height: 36px;
+    padding-inline: 11px;
+  }
+}

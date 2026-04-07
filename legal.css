@@ -1,0 +1,149 @@
+:root {
+  color-scheme: dark;
+  --bg-1: #061342;
+  --bg-2: #10234f;
+  --panel: rgba(255, 255, 255, 0.06);
+  --line: rgba(255, 255, 255, 0.12);
+  --text: #f6f8ff;
+  --muted: #b8c4df;
+  --accent: #7bc4ff;
+  --shadow: 0 28px 70px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: system-ui, "Segoe UI", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top, rgba(28, 45, 199, 0.25), transparent 28%),
+    linear-gradient(160deg, var(--bg-1), var(--bg-2));
+  color: var(--text);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.page {
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 32px 22px 64px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand img {
+  width: 62px;
+  height: auto;
+}
+
+.brand-copy strong {
+  display: block;
+  font-size: 1.2rem;
+}
+
+.brand-copy span {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.back-link {
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--line);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.back-link:hover {
+  background: rgba(255, 255, 255, 0.14);
+  transform: translateY(-1px);
+}
+
+.panel {
+  padding: 28px;
+  border-radius: 28px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+}
+
+.eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.panel h1 {
+  margin-top: 12px;
+  font-size: clamp(2.2rem, 6vw, 3.8rem);
+  line-height: 0.95;
+}
+
+.intro {
+  margin-top: 16px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.section-list {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.section-card {
+  padding: 20px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.section-card h2 {
+  font-size: 1.15rem;
+}
+
+.section-card p {
+  margin-top: 10px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.footer-note {
+  margin-top: 20px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+@media (max-width: 640px) {
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .panel {
+    padding: 22px;
+  }
+}

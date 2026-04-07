@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lytune </title>
+  <link rel="icon" href="assets/images/logo.png" sizes="32x32" type="image/png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background"></div>  
+  <div class="splash-content" id="splash">
+    <img src="assets/images/logo.png" alt="Lytune Logo" class="login-logo">
+    <h1 class="app-name">Lytune</h1>
+    <p class="tagline">Feel the beat. Live the moment.</p>
+  </div>
+      <script>
+    setTimeout(() => {
+      document.getElementById('splash').classList.add('fade-out');
+      setTimeout(() => {
+        window.location.href = 'index.html';
+      }, 1000); 
+    }, 3000); 
+  </script>
+
+</body>
+</html>

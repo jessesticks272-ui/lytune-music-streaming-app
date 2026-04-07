@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lytune</title>
+  <link rel="stylesheet" href="login.css">
+  <link rel="icon" href="assets/images/logo.png" sizes="128x128" type="image/png">
+</head>
+<body>
+  <div class="background"></div>
+
+  <div class="login-card" id="homecard">
+    <img src="assets/images/logo.png" class="login-logo" alt="Lytune Logo">
+    <h1 class="app-name">Lytune</h1>
+    <h2 class="title">Welcome back</h2>
+    <p class="subtitle">Log in to feel the beat. Live the moment.</p>
+
+    <form id="loginForm" action="home.html" data-auth-form="login" data-auth-redirect="home.html">
+      <div class="form-box">
+        <input id="loginEmail" type="email" placeholder="email@domain.com" autocomplete="email" required>
+        <input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password" minlength="8" required>
+        <button type="submit" class="btn dark">Login</button>
+      </div>
+    </form>
+
+    <div class="divider">
+      <span>or continue with</span>
+    </div>
+
+    <button type="button" class="google-btn" data-google-auth data-auth-redirect="home.html">
+      <img src="assets/images/google.png" alt="Google logo">
+      Google
+    </button>
+
+    <p class="agreement">
+      Don't have an account?
+      <a href="signup.html">Create one</a>
+    </p>
+  </div>
+  <script src="auth.js"></script>
+</body>
+</html>
