@@ -41,6 +41,7 @@ Lytune is a music streaming app prototype built with HTML, CSS, JavaScript, Node
 
 ## Getting Started
 
+
 ### 1. Install dependencies
 
 ```bash
@@ -85,6 +86,7 @@ http://lytune.localhost:3000
 ```bash
 npm start
 ```
+
 
 ## Notes
 
