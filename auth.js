@@ -113,17 +113,3 @@ app.post('/api/auth/google', (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
-
-// -- Social login stub
-app.get('/api/auth/google/config', (req, res) => {
-  res.json({ enabled: false });
-});
-
-app.post('/api/auth/google', (req, res) => {
-  res.status(400).json({ success: false, message: 'Google auth not set up yet' });
-});
-
-// -- Start the server
-app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
-});
