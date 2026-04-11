@@ -3,16 +3,11 @@
   "buildCommand": "npm run build",
   "version": 2,
   "routes": [
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/index.js"
-    },
-    {
-      "src": "/login",
-      "dest": "/api/index.js"
-    }
+    { "src": "^/api/(.*)", "dest": "/api/index.js" },
+    { "src": "^/login", "dest": "/api/index.js" },
+    { "src": "^/.*\.(html|js|css|png|jpg|jpeg|gif|svg|ico|webp|json|txt)$", "dest": "/api/index.js" },
+    { "src": "^/$", "dest": "/api/index.js" },
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/api/index.js" }
   ]
 }
