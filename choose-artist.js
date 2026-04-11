@@ -2,8 +2,8 @@ const grid = document.getElementById("artistGrid");
 const maxSelection = 5;
 const selectionInfo = document.getElementById("selectionInfo");
 const IMAGE_API_CANDIDATES = [
-  "http://lytune.localhost:3000/api/artist-image",
-  "/api/artist-image"
+  "/api/artist-image",
+  "http://lytune.localhost:3000/api/artist-image"
 ];
 let isSavingSelection = false;
 

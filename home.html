@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lytune</title>
+   <title>Lytune-Streaming App</title>
   <link rel="icon" href="assets/images/logo.png" sizes="32x32" type="image/png">
 
   <link rel="stylesheet" href="home.css">
@@ -127,6 +127,7 @@
   </div>
 
   <script src="player.js"></script>
+  <script src="auth.js"></script>
   <script>
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -287,29 +288,46 @@ document.addEventListener("DOMContentLoaded", function () {
     dropdown.classList.toggle("show");
   });
 
-  upload.addEventListener("change", function () {
+  upload.addEventListener("change", async function () {
     const file = this.files[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = function () {
-      avatar.src = reader.result;
-      localStorage.setItem("avatar", reader.result);
-    };
-    reader.readAsDataURL(file);
+    try {
+      await window.LytuneAuth?.handleProfileUpload(file, { silentSuccess: true });
+    } catch (error) {
+      window.LytuneAuth?.setMessage(error.message || "We could not save your profile picture.", "error");
+    } finally {
+      this.value = "";
+    }
   });
 
-  document.getElementById("change-name").addEventListener("click", () => {
-    const newName = prompt("Enter your name:");
-    if (newName) {
-      username.textContent = newName;
-      localStorage.setItem("username", newName);
+  document.getElementById("change-name").addEventListener("click", async () => {
+    const newName = prompt("Enter your name:", username.textContent);
+    if (!newName || !newName.trim()) {
+      return;
+    }
+
+    const trimmedName = newName.trim();
+    username.textContent = trimmedName;
+    localStorage.setItem("username", trimmedName);
+
+    try {
+      if (localStorage.getItem("authToken") && window.LytuneAuth?.updateProfile) {
+        await window.LytuneAuth.updateProfile({ username: trimmedName });
+      }
+    } catch (error) {
+      window.LytuneAuth?.setMessage(error.message || "We could not save your name.", "error");
     }
   });
 
 
-  document.getElementById("logout").addEventListener("click", () => {
-    localStorage.clear();
+  document.getElementById("logout").addEventListener("click", async () => {
+    if (window.LytuneAuth?.logout) {
+      await window.LytuneAuth.logout();
+    } else {
+      localStorage.clear();
+    }
+
     location.reload();
   });
 
@@ -779,8 +797,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const loadHomeFromDeezer = async () => {
     const apiCandidates = [
-      "http://lytune.localhost:3000/api/deezer/home",
-      "/api/deezer/home"
+      "/api/deezer/home",
+      "http://lytune.localhost:3000/api/deezer/home"
     ];
 
     let lastError = null;

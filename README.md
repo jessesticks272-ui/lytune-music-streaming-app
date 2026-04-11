@@ -1,6 +1,6 @@
 # Lytune
 
-Lytune is a music streaming app prototype built with HTML, CSS, JavaScript, and Node.js. It includes a home page, search, player bar, podcasts, downloads, library views, and local authentication/profile flows.
+Lytune is a music streaming app prototype built with HTML, CSS, JavaScript, Node.js, Express, and SQLite-backed local app data. It includes a home page, search, player bar, podcasts, downloads, library views, and local authentication/profile flows.
 
 ## Features
 
@@ -10,6 +10,7 @@ Lytune is a music streaming app prototype built with HTML, CSS, JavaScript, and 
 - Google sign-in support when credentials are added
 - Artist image lookup support when Google Custom Search is configured
 - Express server for API routes and static file hosting
+- SQLite-backed library, playlist, download, history, and moments storage
 
 ## Tech Stack
 
@@ -18,6 +19,7 @@ Lytune is a music streaming app prototype built with HTML, CSS, JavaScript, and 
 - JavaScript
 - Node.js
 - Express
+- SQLite via Node's built-in `node:sqlite`
 
 ## Project Structure
 
@@ -88,6 +90,7 @@ npm start
 
 - `.env` is not committed to GitHub. Use `.env.example` for shared setup.
 - `node_modules` should not be uploaded to GitHub.
+- local SQLite and JSON data files are ignored in `.gitignore`.
 - This repository can be hosted on GitHub as source code, but the Express server will need a Node.js hosting platform for a live deployed app.
 
 ## Author

@@ -79,7 +79,7 @@
       id: track.id || ""
     });
 
-    if ((track.type || "track") === "track") {
+    if ((track.type || "track") === "track") { 
       query.set("autoplay", "1");
     }
 

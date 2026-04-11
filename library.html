@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lytune Library</title>
+   <title>Lytune-Streaming App</title>
   <link rel="icon" href="assets/images/logo.png" sizes="32x32" type="image/png">
   <link rel="stylesheet" href="library.css">
   <link rel="stylesheet" href="player.css">
@@ -266,8 +266,8 @@
       const vaultGrid = document.getElementById("vault-grid");
       const filterButtons = document.querySelectorAll("[data-library-filter]");
       const LIBRARY_API_CANDIDATES = [
-        "http://lytune.localhost:3000/api/library",
-        "/api/library"
+        "/api/library",
+        "http://lytune.localhost:3000/api/library"
       ];
       const LOCAL_LIBRARY_FALLBACK = {
         summary: {

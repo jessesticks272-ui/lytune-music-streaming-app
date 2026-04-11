@@ -418,15 +418,40 @@ body {
 }
 
 .back-arrow img {
-  width: 24px;      
-  height: 24px;
-  opacity: 0.9;
+  width: 25px;      
+  height: 25px;
+  opacity: 10;
 }
 
 .back-arrow img:hover {
   opacity: 1;
   transform: scale(1.1);
 }
+.button {
+ width: 80%;
+  padding: 20px 0;
+  border-radius: 40px;
+  border: none;
+  background: white;
+  color: black;
+  transition: all 0.2s ease;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.button:hover {
+  background-color: #06153F;
+  color: #ffffff;
+  transform: translateY(-2px) scale(1.10);
+}
+
+.button:active {
+  background-color: #040F2A;
+  transform: translateY(1px);
+}
+
 
 
 

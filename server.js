@@ -1,4 +1,4 @@
-const fs = require('fs');
+﻿const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const {
@@ -17,8 +17,9 @@ const {
   verifyLocalPassword,
   writeAuthStore
 } = require('./auth-store');
+const libraryStore = require('./library-store');
 const app = express();
-const PORT = 3000;
+const PORT = Number(process.env.PORT) || 3000;
 const PREFERRED_LOCAL_HOSTNAME = 'lytune.localhost';
 const PREFERRED_LOCAL_ORIGIN = `http://${PREFERRED_LOCAL_HOSTNAME}:${PORT}`;
 const LEGACY_LOCAL_HOSTS = new Set(['localhost', '127.0.0.1']);
@@ -106,8 +107,6 @@ const HOME_CACHE_TTL_MS = 5 * 60 * 1000;
 const SEARCH_CACHE_TTL_MS = 5 * 60 * 1000;
 const PODCAST_CACHE_TTL_MS = 5 * 60 * 1000;
 const LYRICS_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
-const DATA_DIRECTORY = path.join(__dirname, 'data');
-const LIBRARY_STORE_PATH = path.join(DATA_DIRECTORY, 'library-store.json');
 let deezerHomeCache = {
   expiresAt: 0,
   payload: null
@@ -131,7 +130,7 @@ const LOCAL_SEARCH_CATALOG = [
     title: 'Laho',
     subtitle: 'Shallipopi',
     image: 'assets/images/Album 1.png',
-    detail: 'Track • Street pop energy • Trending on Lytune',
+    detail: 'Track â€¢ Street pop energy â€¢ Trending on Lytune',
     tokens: ['afrobeats', 'new releases', 'shallipopi', 'song', 'music'],
     duration: 167,
     albumTitle: 'Presido La Pluto'
@@ -142,7 +141,7 @@ const LOCAL_SEARCH_CATALOG = [
     title: 'Higher',
     subtitle: 'Burna Boy',
     image: 'assets/images/Album 2.png',
-    detail: 'Track • Burna Boy • High rotation',
+    detail: 'Track â€¢ Burna Boy â€¢ High rotation',
     tokens: ['afrobeats', 'burna boy', 'song', 'music'],
     duration: 178,
     albumTitle: 'Lytune Fallback Sessions'
@@ -153,7 +152,7 @@ const LOCAL_SEARCH_CATALOG = [
     title: 'Love Me JeJe',
     subtitle: 'Tems',
     image: 'assets/images/Album 3.png',
-    detail: 'Track • Tems • Smooth replay favorite',
+    detail: 'Track â€¢ Tems â€¢ Smooth replay favorite',
     tokens: ['tems', 'soul', 'song', 'music'],
     duration: 164,
     albumTitle: 'Born in the Wild'
@@ -164,7 +163,7 @@ const LOCAL_SEARCH_CATALOG = [
     title: 'Ozeba',
     subtitle: 'Rema',
     image: 'assets/images/Album 4.png',
-    detail: 'Track • Rema • Global afropop momentum',
+    detail: 'Track â€¢ Rema â€¢ Global afropop momentum',
     tokens: ['rema', 'afrobeats', 'party', 'song'],
     duration: 152,
     albumTitle: 'HEIS'
@@ -175,7 +174,7 @@ const LOCAL_SEARCH_CATALOG = [
     title: 'Piece of My Heart',
     subtitle: 'Wizkid',
     image: 'assets/images/Album 5.png',
-    detail: 'Track • Wizkid • Late-night replay',
+    detail: 'Track â€¢ Wizkid â€¢ Late-night replay',
     tokens: ['wizkid', 'afrobeats', 'romance', 'song'],
     duration: 187,
     albumTitle: 'Morayo'
@@ -186,7 +185,7 @@ const LOCAL_SEARCH_CATALOG = [
     title: 'Chart Run',
     subtitle: 'Asake',
     image: 'assets/images/Album 6.png',
-    detail: 'Album • New releases • Lytune editorial pick',
+    detail: 'Album â€¢ New releases â€¢ Lytune editorial pick',
     tokens: ['album', 'asake', 'new releases']
   },
   {
@@ -195,7 +194,7 @@ const LOCAL_SEARCH_CATALOG = [
     title: 'Late Checkout',
     subtitle: 'Ayra Starr',
     image: 'assets/images/Album 7.png',
-    detail: 'Album • Ayra Starr • Summer-ready mood',
+    detail: 'Album â€¢ Ayra Starr â€¢ Summer-ready mood',
     tokens: ['album', 'ayra starr', 'pop']
   },
   {
@@ -204,7 +203,7 @@ const LOCAL_SEARCH_CATALOG = [
     title: 'Summer Frequency',
     subtitle: 'Omah Lay',
     image: 'assets/images/Album 8.jpg',
-    detail: 'Album • Omah Lay • Soft and melodic',
+    detail: 'Album â€¢ Omah Lay â€¢ Soft and melodic',
     tokens: ['album', 'omah lay', 'new releases']
   },
   {
@@ -213,7 +212,7 @@ const LOCAL_SEARCH_CATALOG = [
     title: 'Burna Boy',
     subtitle: 'Artist',
     image: 'assets/artists/burnaboy.jpg',
-    detail: 'Artist • Afrofusion heavyweight',
+    detail: 'Artist â€¢ Afrofusion heavyweight',
     tokens: ['artist', 'burna boy', 'afrobeats']
   },
   {
@@ -222,7 +221,7 @@ const LOCAL_SEARCH_CATALOG = [
     title: 'Tems',
     subtitle: 'Artist',
     image: 'assets/artists/tems.png',
-    detail: 'Artist • Soulful global voice',
+    detail: 'Artist â€¢ Soulful global voice',
     tokens: ['artist', 'tems', 'soul']
   },
   {
@@ -231,7 +230,7 @@ const LOCAL_SEARCH_CATALOG = [
     title: 'Rema',
     subtitle: 'Artist',
     image: 'assets/artists/rema.jpg',
-    detail: 'Artist • Afropop hitmaker',
+    detail: 'Artist â€¢ Afropop hitmaker',
     tokens: ['artist', 'rema', 'afropop']
   },
   {
@@ -240,7 +239,7 @@ const LOCAL_SEARCH_CATALOG = [
     title: 'Afrobeats Pulse',
     subtitle: 'Lytune',
     image: 'assets/images/Album 11.png',
-    detail: 'Playlist • Lytune • Big hooks and current favorites',
+    detail: 'Playlist â€¢ Lytune â€¢ Big hooks and current favorites',
     tokens: ['playlist', 'afrobeats', 'mix']
   },
   {
@@ -249,7 +248,7 @@ const LOCAL_SEARCH_CATALOG = [
     title: 'Behind the Beat',
     subtitle: 'Lytune Original',
     image: 'assets/images/Album 11.png',
-    detail: 'Podcast • Music stories and artist conversation',
+    detail: 'Podcast â€¢ Music stories and artist conversation',
     tokens: ['podcast', 'talk', 'stories']
   },
   {
@@ -258,7 +257,7 @@ const LOCAL_SEARCH_CATALOG = [
     title: 'Night Drive Talks',
     subtitle: 'Lytune Sessions',
     image: 'assets/images/Album 12.png',
-    detail: 'Podcast • Chill reflections for late listening',
+    detail: 'Podcast â€¢ Chill reflections for late listening',
     tokens: ['podcast', 'night', 'talk']
   }
 ];
@@ -709,600 +708,6 @@ const createContentRecordFromPodcastCard = (show) =>
     source: show.source
   });
 
-const cloneValue = (value) => JSON.parse(JSON.stringify(value));
-
-const LIBRARY_PROFILE_TEMPLATE = {
-  displayName: 'Guest Listener',
-  summary: {
-    savedCount: 128,
-    recentSessions: 7,
-    followingCount: 12
-  },
-  savedItemIds: [
-    'local-playlist-1',
-    'local-track-2',
-    'local-podcast-1',
-    'local-artist-1',
-    'local-album-2',
-    'local-track-4',
-    'local-podcast-2',
-    'local-artist-2',
-    'local-artist-3',
-    'local-podcast-4',
-    'local-podcast-6'
-  ],
-  pinned: [
-    {
-      contentId: 'local-playlist-1',
-      category: 'music',
-      tag: 'Playlist',
-      note: 'Lytune editorial mix built for your daily replay.'
-    },
-    {
-      contentId: 'local-track-2',
-      category: 'music',
-      tag: 'Liked song',
-      note: 'Burna Boy still leads your most played rotation.'
-    },
-    {
-      contentId: 'local-podcast-1',
-      category: 'podcast',
-      tag: 'Saved podcast',
-      note: 'Lytune Original stories and music conversations you saved for later.'
-    },
-    {
-      contentId: 'local-artist-1',
-      category: 'creator',
-      tag: 'Following',
-      note: 'Your library keeps favorite creators close, not buried in search.'
-    }
-  ],
-  recent: [
-    {
-      contentId: 'local-album-2',
-      category: 'music',
-      note: 'Ayra Starr • Album • Started 18 minutes ago'
-    },
-    {
-      contentId: 'local-track-4',
-      category: 'music',
-      note: 'Rema • Track • In heavy rotation this week'
-    },
-    {
-      contentId: 'local-podcast-2',
-      category: 'podcast',
-      note: 'Lytune Sessions • Podcast • Picked back up last night'
-    }
-  ],
-  creators: [
-    {
-      contentId: 'local-artist-2',
-      category: 'creator',
-      note: 'Soulful, cinematic, and always replayable.'
-    },
-    {
-      contentId: 'local-artist-3',
-      category: 'creator',
-      note: 'Your high-energy Afropop lane stays within reach.'
-    },
-    {
-      contentId: 'local-podcast-4',
-      category: 'podcast',
-      note: 'Creator Room brings the making-of angle you keep saving.'
-    },
-    {
-      contentId: 'local-podcast-6',
-      category: 'podcast',
-      note: 'Spotlights voices and scenes building the next wave.'
-    }
-  ],
-  vault: [
-    {
-      id: 'vault-1',
-      category: 'music',
-      label: 'Queue',
-      title: 'Night drive sequence',
-      description: 'Tems, Omah Lay, and soft mood records stacked for later playback.'
-    },
-    {
-      id: 'vault-2',
-      category: 'podcast',
-      label: 'Episodes',
-      title: '3 unfinished stories',
-      description: 'Saved podcast episodes are waiting at the exact point where you paused.'
-    },
-    {
-      id: 'vault-3',
-      category: 'creator',
-      label: 'Following',
-      title: 'Release alerts on',
-      description: 'Library is ready for future notifications once the backend handles follows and updates.'
-    }
-  ],
-  downloads: {
-    summary: {
-      storageUsedGb: 3.2,
-      storageReservedGb: 8,
-      readyCount: 48,
-      queueCount: 6
-    },
-    ready: [
-      {
-        contentId: 'local-track-1',
-        category: 'music',
-        tag: 'Track - Offline',
-        note: 'Shallipopi - Downloaded in high quality'
-      },
-      {
-        contentId: 'local-album-1',
-        category: 'music',
-        tag: 'Album - Offline',
-        note: 'Asake - Cached for full offline listening'
-      },
-      {
-        contentId: 'local-podcast-3',
-        category: 'podcast',
-        tag: 'Podcast - Offline',
-        note: 'Lytune Editorial - Latest episode stored on device'
-      },
-      {
-        contentId: 'local-podcast-5',
-        category: 'podcast',
-        tag: 'Podcast - Offline',
-        note: 'Lytune Voices - Ready for lower-data playback'
-      }
-    ],
-    queue: [
-      {
-        contentId: 'local-track-3',
-        category: 'queued',
-        title: 'Love Me JeJe',
-        note: 'Tems - Waiting for stronger connection',
-        status: 'pending'
-      },
-      {
-        contentId: 'local-podcast-6',
-        category: 'queued',
-        title: 'Mic Check Africa',
-        note: 'Lytune Spotlight - Download paused at 68%',
-        status: 'active'
-      },
-      {
-        contentId: 'local-playlist-1',
-        category: 'queued',
-        title: 'Afrobeats Pulse',
-        note: 'Lytune - Playlist batch waiting behind current jobs',
-        status: 'pending'
-      }
-    ],
-    settings: {
-      wifiOnly: true,
-      smartCleanupDays: 21
-    },
-    statusCards: [
-      {
-        id: 'status-finished',
-        label: 'Finished',
-        title: 'Offline tracks and episodes',
-        description: 'These will become real saved files tied to the signed-in Lytune account.'
-      },
-      {
-        id: 'status-queued',
-        label: 'Queued',
-        title: 'Priority order and retries',
-        description: 'We can surface waiting jobs, pause states, and retry rules once the backend is active.'
-      },
-      {
-        id: 'status-errors',
-        label: 'Errors',
-        title: 'Failed download recovery',
-        description: 'The page is already shaped to show expired links, low storage, or broken network issues clearly.'
-      }
-    ]
-  },
-  history: [
-    {
-      contentId: 'local-album-2',
-      note: 'Ayra Starr - Album - Started 18 minutes ago',
-      playedAt: null
-    },
-    {
-      contentId: 'local-track-4',
-      note: 'Rema - Track - In heavy rotation this week',
-      playedAt: null
-    },
-    {
-      contentId: 'local-podcast-2',
-      note: 'Lytune Sessions - Podcast - Picked back up last night',
-      playedAt: null
-    }
-  ],
-  playlists: [
-    {
-      id: 'playlist-user-1',
-      title: 'Evening Recharge',
-      description: 'Soft landing songs for calm, reflective listening.',
-      coverImage: 'assets/images/Album 7.png',
-      itemIds: ['local-track-2', 'local-track-3', 'local-track-5'],
-      updatedAt: null
-    },
-    {
-      id: 'playlist-user-2',
-      title: 'Focus and Motion',
-      description: 'A tighter run of records for long work sessions and steady momentum.',
-      coverImage: 'assets/images/Album 4.png',
-      itemIds: ['local-track-1', 'local-track-4', 'local-album-1'],
-      updatedAt: null
-    }
-  ],
-  moments: {},
-  createdAt: null,
-  updatedAt: null
-};
-
-const createEmptyLibraryStore = () => ({
-  users: {}
-});
-
-const createDefaultLibraryProfile = (displayName = 'Guest Listener') => {
-  const now = new Date().toISOString();
-  const profile = cloneValue(LIBRARY_PROFILE_TEMPLATE);
-  profile.displayName = displayName;
-  profile.createdAt = now;
-  profile.updatedAt = now;
-  return profile;
-};
-
-const ensureDataDirectory = () => {
-  if (!fs.existsSync(DATA_DIRECTORY)) {
-    fs.mkdirSync(DATA_DIRECTORY, { recursive: true });
-  }
-};
-
-const ensureLibraryStoreFile = () => {
-  ensureDataDirectory();
-
-  if (!fs.existsSync(LIBRARY_STORE_PATH)) {
-    fs.writeFileSync(
-      LIBRARY_STORE_PATH,
-      JSON.stringify(createEmptyLibraryStore(), null, 2),
-      'utf8'
-    );
-  }
-};
-
-const readLibraryStore = () => {
-  ensureLibraryStoreFile();
-
-  try {
-    const rawValue = fs.readFileSync(LIBRARY_STORE_PATH, 'utf8');
-    const parsedValue = JSON.parse(rawValue);
-
-    if (!parsedValue || typeof parsedValue !== 'object' || !parsedValue.users) {
-      throw new Error('Invalid library store shape.');
-    }
-
-    return parsedValue;
-  } catch (error) {
-    const fallbackStore = createEmptyLibraryStore();
-    fs.writeFileSync(LIBRARY_STORE_PATH, JSON.stringify(fallbackStore, null, 2), 'utf8');
-    return fallbackStore;
-  }
-};
-
-const writeLibraryStore = (store) => {
-  ensureDataDirectory();
-  fs.writeFileSync(LIBRARY_STORE_PATH, JSON.stringify(store, null, 2), 'utf8');
-};
-
-const createLibraryContentUrl = (type, id) => {
-  const params = new URLSearchParams({
-    type,
-    id
-  });
-
-  if (type === 'track') {
-    params.set('autoplay', '1');
-  }
-
-  return `content.html?${params.toString()}`;
-};
-
-const getLibraryCategoryForType = (type = '') => {
-  if (type === 'podcast') {
-    return 'podcast';
-  }
-
-  if (type === 'artist') {
-    return 'creator';
-  }
-
-  return 'music';
-};
-
-const sanitizeLibraryUserKey = (value = '') => {
-  const normalizedValue = normalizeSearchValue(value).replace(/[^a-z0-9@._-]+/g, '-');
-  return normalizedValue || 'guest';
-};
-
-const resolveLibraryUser = (req) => {
-  const requestedUser =
-    req.get('x-lytune-user') ||
-    req.query.user ||
-    req.body?.user ||
-    req.get('x-lytune-email') ||
-    'guest';
-  const displayName =
-    (req.get('x-lytune-user-name') ||
-      req.query.displayName ||
-      req.body?.displayName ||
-      requestedUser ||
-      'Guest Listener')
-      .toString()
-      .trim() || 'Guest Listener';
-
-  return {
-    key: sanitizeLibraryUserKey(requestedUser),
-    displayName
-  };
-};
-
-const getOrCreateLibraryProfile = (store, userContext) => {
-  const existingProfile = store.users[userContext.key];
-
-  if (!existingProfile) {
-    const createdProfile = createDefaultLibraryProfile(userContext.displayName);
-    store.users[userContext.key] = createdProfile;
-    return { profile: createdProfile, created: true };
-  }
-
-  if (userContext.displayName && existingProfile.displayName !== userContext.displayName) {
-    existingProfile.displayName = userContext.displayName;
-    existingProfile.updatedAt = new Date().toISOString();
-  }
-
-  return { profile: existingProfile, created: false };
-};
-
-const buildLibraryContentItem = (catalogById, entry, fallbackTag = null) => {
-  const content = catalogById.get(entry.contentId);
-
-  if (!content) {
-    return null;
-  }
-
-  return {
-    id: content.id,
-    type: content.type,
-    category: entry.category || getLibraryCategoryForType(content.type),
-    tag: entry.tag || fallbackTag || formatContentTypeLabel(content.type),
-    title: content.title,
-    subtitle: content.subtitle,
-    image: content.image,
-    note: entry.note || content.description,
-    href: createLibraryContentUrl(content.type, content.id),
-    isSaved: true
-  };
-};
-
-const buildLibraryPayload = (profile, catalog) => {
-  const catalogById = new Map(catalog.map((item) => [item.id, item]));
-
-  return {
-    summary: {
-      savedCount: Number.isFinite(profile.summary?.savedCount)
-        ? profile.summary.savedCount
-        : profile.savedItemIds?.length || 0,
-      recentSessions: Number.isFinite(profile.summary?.recentSessions)
-        ? profile.summary.recentSessions
-        : profile.recent?.length || 0,
-      followingCount: Number.isFinite(profile.summary?.followingCount)
-        ? profile.summary.followingCount
-        : profile.creators?.length || 0
-    },
-    pinned: (profile.pinned || [])
-      .map((entry) => buildLibraryContentItem(catalogById, entry))
-      .filter(Boolean),
-    recent: (profile.recent || [])
-      .map((entry) => buildLibraryContentItem(catalogById, entry, 'Recent'))
-      .filter(Boolean),
-    creators: (profile.creators || [])
-      .map((entry) => buildLibraryContentItem(catalogById, entry, 'Following'))
-      .filter(Boolean),
-    vault: (profile.vault || []).map((entry) => ({
-      id: entry.id,
-      category: entry.category || 'music',
-      label: entry.label,
-      title: entry.title,
-      description: entry.description
-    })),
-    savedItemIds: profile.savedItemIds || [],
-    updatedAt: profile.updatedAt || null
-  };
-};
-
-const createLibraryEntryFromContent = (content, note, tag = null) => ({
-  contentId: content.id,
-  category: getLibraryCategoryForType(content.type),
-  tag: tag || formatContentTypeLabel(content.type),
-  note
-});
-
-const buildDownloadsContentItem = (catalogById, entry) => {
-  const content = catalogById.get(entry.contentId);
-
-  if (!content) {
-    return null;
-  }
-
-  return {
-    id: content.id,
-    type: content.type,
-    category: entry.category || getLibraryCategoryForType(content.type),
-    tag: entry.tag || `${formatContentTypeLabel(content.type)} - Offline`,
-    title: entry.title || content.title,
-    subtitle: content.subtitle,
-    image: content.image,
-    note: entry.note || content.description,
-    href: createLibraryContentUrl(content.type, content.id)
-  };
-};
-
-const buildDownloadsPayload = (profile, catalog) => {
-  const catalogById = new Map(catalog.map((item) => [item.id, item]));
-  const downloads = profile.downloads || {};
-  const summary = downloads.summary || {};
-  const readyItems = (downloads.ready || [])
-    .map((entry) => buildDownloadsContentItem(catalogById, entry))
-    .filter(Boolean);
-  const queueItems = (downloads.queue || [])
-    .map((entry) => {
-      const content = catalogById.get(entry.contentId);
-      const fallbackType = content?.type || 'track';
-
-      return {
-        id: entry.contentId,
-        type: fallbackType,
-        category: entry.category || 'queued',
-        title: entry.title || content?.title || 'Queued item',
-        note: entry.note || content?.description || 'Waiting for download processing.',
-        status: entry.status || 'pending',
-        href: content ? createLibraryContentUrl(content.type, content.id) : null
-      };
-    })
-    .filter(Boolean);
-
-  return {
-    summary: {
-      storageUsedGb: Number.isFinite(summary.storageUsedGb) ? summary.storageUsedGb : 0,
-      storageReservedGb: Number.isFinite(summary.storageReservedGb) ? summary.storageReservedGb : 8,
-      readyCount: Number.isFinite(summary.readyCount) ? summary.readyCount : readyItems.length,
-      queueCount: Number.isFinite(summary.queueCount) ? summary.queueCount : queueItems.length
-    },
-    ready: readyItems,
-    queue: queueItems,
-    settings: {
-      wifiOnly: downloads.settings?.wifiOnly !== false,
-      smartCleanupDays: Number.isFinite(downloads.settings?.smartCleanupDays)
-        ? downloads.settings.smartCleanupDays
-        : 21
-    },
-    statusCards: (downloads.statusCards || []).map((item) => ({
-      id: item.id,
-      label: item.label,
-      title: item.title,
-      description: item.description
-    })),
-    updatedAt: profile.updatedAt || null
-  };
-};
-
-const buildHistoryPayload = (profile, catalog) => {
-  const catalogById = new Map(catalog.map((item) => [item.id, item]));
-
-  return (profile.history || [])
-    .map((entry) => {
-      const content = catalogById.get(entry.contentId);
-
-      if (!content) {
-        return null;
-      }
-
-      return {
-        id: content.id,
-        type: content.type,
-        title: content.title,
-        subtitle: content.subtitle,
-        image: content.image,
-        note: entry.note || content.description,
-        playedAt: entry.playedAt || null,
-        href: createLibraryContentUrl(content.type, content.id)
-      };
-    })
-    .filter(Boolean);
-};
-
-const buildPlaylistsPayload = (profile, catalog) => {
-  const catalogById = new Map(catalog.map((item) => [item.id, item]));
-
-  return (profile.playlists || []).map((playlist) => ({
-    id: playlist.id,
-    title: playlist.title,
-    description: playlist.description,
-    coverImage: playlist.coverImage || 'assets/images/logo.png',
-    itemCount: (playlist.itemIds || []).length,
-    updatedAt: playlist.updatedAt || profile.updatedAt || null,
-    items: (playlist.itemIds || [])
-      .map((itemId) => catalogById.get(itemId))
-      .filter(Boolean)
-      .map((item) => ({
-        id: item.id,
-        type: item.type,
-        title: item.title,
-        subtitle: item.subtitle,
-        image: item.image,
-        href: createLibraryContentUrl(item.type, item.id)
-      }))
-  }));
-};
-
-const buildMomentPayload = (profile, contentId) => {
-  const savedMoment = profile.moments?.[contentId] || null;
-
-  return {
-    contentId,
-    mood: savedMoment?.mood || '',
-    note: savedMoment?.note || '',
-    updatedAt: savedMoment?.updatedAt || null
-  };
-};
-
-const formatHistoryNote = (content, fallbackPrefix = 'Played recently') => {
-  const detail = content.subtitle
-    ? `${content.subtitle} - ${formatContentTypeLabel(content.type)}`
-    : formatContentTypeLabel(content.type);
-
-  return `${detail} - ${fallbackPrefix}`;
-};
-
-const updateRecentFromHistory = (profile, content, note) => {
-  profile.recent = [
-    {
-      contentId: content.id,
-      category: getLibraryCategoryForType(content.type),
-      note
-    },
-    ...(profile.recent || []).filter((entry) => entry.contentId !== content.id)
-  ].slice(0, 3);
-};
-
-const updateSummaryFromProfile = (profile) => {
-  profile.summary = profile.summary || {};
-  profile.summary.savedCount = Math.max(
-    Number.isFinite(profile.summary.savedCount) ? profile.summary.savedCount : 0,
-    (profile.savedItemIds || []).length
-  );
-  profile.summary.recentSessions = Math.max(
-    Number.isFinite(profile.summary.recentSessions) ? profile.summary.recentSessions : 0,
-    (profile.history || []).length
-  );
-  profile.summary.followingCount = Math.max(
-    Number.isFinite(profile.summary.followingCount) ? profile.summary.followingCount : 0,
-    (profile.creators || []).filter((entry) => entry.category === 'creator').length
-  );
-
-  profile.downloads = profile.downloads || {};
-  profile.downloads.summary = profile.downloads.summary || {};
-  profile.downloads.summary.readyCount = Math.max(
-    Number.isFinite(profile.downloads.summary.readyCount) ? profile.downloads.summary.readyCount : 0,
-    (profile.downloads.ready || []).length
-  );
-  profile.downloads.summary.queueCount = Math.max(
-    Number.isFinite(profile.downloads.summary.queueCount) ? profile.downloads.summary.queueCount : 0,
-    (profile.downloads.queue || []).length
-  );
-};
-
 const buildHomePayload = async () => {
   const results = await Promise.allSettled([
     fetchDeezerList('chart/0/tracks', 10),
@@ -1354,7 +759,7 @@ const buildSearchCatalogFromHomePayload = (payload) => {
       title: track.title || 'Untitled track',
       subtitle: track.artist?.name || 'Track',
       image: track.album?.cover_medium,
-      detail: `Track • ${track.artist?.name || 'Unknown artist'}`,
+      detail: `Track â€¢ ${track.artist?.name || 'Unknown artist'}`,
       link: track.link || null,
       tokens: [track.artist?.name, 'track', 'song', 'music'],
       source: 'live',
@@ -1371,7 +776,7 @@ const buildSearchCatalogFromHomePayload = (payload) => {
       title: album.title || 'Untitled album',
       subtitle: album.artist?.name || 'Album',
       image: album.cover_medium,
-      detail: `Album • ${album.artist?.name || 'Unknown artist'}`,
+      detail: `Album â€¢ ${album.artist?.name || 'Unknown artist'}`,
       link: album.link || null,
       tokens: [album.artist?.name, 'album', 'new releases'],
       source: 'live'
@@ -1385,7 +790,7 @@ const buildSearchCatalogFromHomePayload = (payload) => {
       title: artist.name || 'Unknown artist',
       subtitle: 'Artist',
       image: artist.picture_medium,
-      detail: 'Artist • Trending on Lytune',
+      detail: 'Artist â€¢ Trending on Lytune',
       link: artist.link || null,
       tokens: ['artist', artist.name, 'music'],
       source: 'live'
@@ -1399,7 +804,7 @@ const buildSearchCatalogFromHomePayload = (payload) => {
       title: playlist.title || 'Playlist',
       subtitle: playlist.user?.name || 'Lytune',
       image: playlist.picture_medium,
-      detail: `Playlist • ${playlist.user?.name || 'Curated on Lytune'}`,
+      detail: `Playlist â€¢ ${playlist.user?.name || 'Curated on Lytune'}`,
       link: playlist.link || null,
       tokens: ['playlist', playlist.user?.name, 'mix'],
       source: 'live'
@@ -1413,7 +818,7 @@ const buildSearchCatalogFromHomePayload = (payload) => {
       title: podcast.title || 'Podcast',
       subtitle: 'Podcast',
       image: podcast.picture_medium,
-      detail: 'Podcast • Trending spoken content',
+      detail: 'Podcast â€¢ Trending spoken content',
       link: podcast.link || null,
       tokens: ['podcast', 'talk', 'stories'],
       source: 'live'
@@ -1508,7 +913,7 @@ const buildLiveQuerySearchItems = async (query, filter, limit) => {
             title: track.title || 'Untitled track',
             subtitle: track.artist?.name || 'Track',
             image: track.album?.cover_medium || track.album?.cover_big || track.album?.cover || '',
-            detail: `Track • ${track.artist?.name || 'Unknown artist'}`,
+            detail: `Track â€¢ ${track.artist?.name || 'Unknown artist'}`,
             link: track.link || null,
             tokens: [track.artist?.name, track.album?.title, 'track', 'song', 'music'],
             source: 'live',
@@ -1530,7 +935,7 @@ const buildLiveQuerySearchItems = async (query, filter, limit) => {
             title: album.title || 'Untitled album',
             subtitle: album.artist?.name || 'Album',
             image: album.cover_medium || album.cover_big || album.cover || '',
-            detail: `Album • ${album.artist?.name || 'Unknown artist'}`,
+            detail: `Album â€¢ ${album.artist?.name || 'Unknown artist'}`,
             link: album.link || null,
             tokens: [album.artist?.name, 'album', 'release', 'music'],
             source: 'live'
@@ -1549,7 +954,7 @@ const buildLiveQuerySearchItems = async (query, filter, limit) => {
             title: artist.name || 'Unknown artist',
             subtitle: 'Artist',
             image: artist.picture_medium || artist.picture_big || artist.picture || '',
-            detail: 'Artist • Live on Deezer',
+            detail: 'Artist â€¢ Live on Deezer',
             link: artist.link || null,
             tokens: ['artist', artist.name, 'music'],
             source: 'live'
@@ -1568,7 +973,7 @@ const buildLiveQuerySearchItems = async (query, filter, limit) => {
             title: playlist.title || 'Playlist',
             subtitle: playlist.user?.name || 'Lytune',
             image: playlist.picture_medium || playlist.picture_big || playlist.picture || '',
-            detail: `Playlist • ${playlist.user?.name || 'Curated on Lytune'}`,
+            detail: `Playlist â€¢ ${playlist.user?.name || 'Curated on Lytune'}`,
             link: playlist.link || null,
             tokens: ['playlist', playlist.user?.name, 'mix'],
             source: 'live'
@@ -1703,7 +1108,7 @@ const fetchLiveContentRecordFromDeezer = async (type, rawId) => {
       title: payload.title || 'Untitled track',
       subtitle: payload.artist?.name || 'Track',
       image: payload.album?.cover_medium || payload.album?.cover_big || payload.album?.cover || 'assets/images/logo.png',
-      description: `Track • ${payload.artist?.name || 'Unknown artist'} • Live from Deezer`,
+      description: `Track â€¢ ${payload.artist?.name || 'Unknown artist'} â€¢ Live from Deezer`,
       meta: [
         'Song',
         payload.album?.title ? `From ${payload.album.title}` : null,
@@ -1731,7 +1136,7 @@ const fetchLiveContentRecordFromDeezer = async (type, rawId) => {
       title: payload.title || 'Untitled album',
       subtitle: payload.artist?.name || 'Album',
       image: payload.cover_medium || payload.cover_big || payload.cover || 'assets/images/logo.png',
-      description: `Album • ${payload.artist?.name || 'Unknown artist'} • Live from Deezer`,
+      description: `Album â€¢ ${payload.artist?.name || 'Unknown artist'} â€¢ Live from Deezer`,
       meta: [
         'Album',
         payload.release_date ? `Released ${payload.release_date}` : null,
@@ -2220,23 +1625,23 @@ app.get('/api/lyrics', async (req, res) => {
 
 app.get('/api/library', async (req, res) => {
   try {
-    const userContext = resolveLibraryUser(req);
-    const store = readLibraryStore();
-    const { profile, created } = getOrCreateLibraryProfile(store, userContext);
+    const userContext = libraryStore.resolveLibraryUser(req);
+    const store = libraryStore.readLibraryStore();
+    const { profile, created } = libraryStore.getOrCreateLibraryProfile(store, userContext);
 
     if (created) {
-      writeLibraryStore(store);
+      libraryStore.writeLibraryStore(store);
     }
 
     const catalog = await getContentCatalog();
 
     return res.json({
-      source: 'file',
+      source: 'sqlite',
       user: {
         key: userContext.key,
         displayName: profile.displayName || userContext.displayName
       },
-      data: buildLibraryPayload(profile, catalog)
+      data: libraryStore.buildLibraryPayload(profile, catalog)
     });
   } catch (error) {
     return res.status(500).json({ error: 'Unable to load library data.' });
@@ -2260,9 +1665,9 @@ app.post('/api/library/toggle', async (req, res) => {
       return res.status(404).json({ error: 'Library item not found in content catalog.' });
     }
 
-    const userContext = resolveLibraryUser(req);
-    const store = readLibraryStore();
-    const { profile } = getOrCreateLibraryProfile(store, userContext);
+    const userContext = libraryStore.resolveLibraryUser(req);
+    const store = libraryStore.readLibraryStore();
+    const { profile } = libraryStore.getOrCreateLibraryProfile(store, userContext);
     const savedItemIds = new Set(profile.savedItemIds || []);
     const wasSaved = savedItemIds.has(content.id);
 
@@ -2285,7 +1690,7 @@ app.post('/api/library/toggle', async (req, res) => {
 
       if (content.type === 'artist') {
         profile.creators = [
-          createLibraryEntryFromContent(
+          libraryStore.createLibraryEntryFromContent(
             content,
             `${content.title} is now part of your followed creators on Lytune.`,
             'Following'
@@ -2296,7 +1701,7 @@ app.post('/api/library/toggle', async (req, res) => {
         profile.summary.followingCount = (profile.summary?.followingCount || 0) + 1;
       } else {
         profile.pinned = [
-          createLibraryEntryFromContent(
+          libraryStore.createLibraryEntryFromContent(
             content,
             `${content.title} was saved into your Lytune library.`,
             formatContentTypeLabel(content.type)
@@ -2308,7 +1713,7 @@ app.post('/api/library/toggle', async (req, res) => {
 
     profile.savedItemIds = Array.from(savedItemIds);
     profile.updatedAt = new Date().toISOString();
-    writeLibraryStore(store);
+    libraryStore.writeLibraryStore(store);
 
     return res.json({
       success: true,
@@ -2317,7 +1722,7 @@ app.post('/api/library/toggle', async (req, res) => {
         key: userContext.key,
         displayName: profile.displayName || userContext.displayName
       },
-      data: buildLibraryPayload(profile, catalog)
+      data: libraryStore.buildLibraryPayload(profile, catalog)
     });
   } catch (error) {
     return res.status(500).json({ error: 'Unable to update library state.' });
@@ -2326,18 +1731,18 @@ app.post('/api/library/toggle', async (req, res) => {
 
 app.get('/api/me', (req, res) => {
   try {
-    const userContext = resolveLibraryUser(req);
-    const store = readLibraryStore();
-    const { profile, created } = getOrCreateLibraryProfile(store, userContext);
+    const userContext = libraryStore.resolveLibraryUser(req);
+    const store = libraryStore.readLibraryStore();
+    const { profile, created } = libraryStore.getOrCreateLibraryProfile(store, userContext);
 
     if (created) {
-      writeLibraryStore(store);
+      libraryStore.writeLibraryStore(store);
     }
 
-    updateSummaryFromProfile(profile);
+    libraryStore.updateSummaryFromProfile(profile);
 
     return res.json({
-      source: 'file',
+      source: 'sqlite',
       data: {
         key: userContext.key,
         displayName: profile.displayName || userContext.displayName,
@@ -2353,24 +1758,24 @@ app.get('/api/me', (req, res) => {
 
 app.get('/api/downloads', async (req, res) => {
   try {
-    const userContext = resolveLibraryUser(req);
-    const store = readLibraryStore();
-    const { profile, created } = getOrCreateLibraryProfile(store, userContext);
+    const userContext = libraryStore.resolveLibraryUser(req);
+    const store = libraryStore.readLibraryStore();
+    const { profile, created } = libraryStore.getOrCreateLibraryProfile(store, userContext);
 
     if (created) {
-      writeLibraryStore(store);
+      libraryStore.writeLibraryStore(store);
     }
 
-    updateSummaryFromProfile(profile);
+    libraryStore.updateSummaryFromProfile(profile);
     const catalog = await getContentCatalog();
 
     return res.json({
-      source: 'file',
+      source: 'sqlite',
       user: {
         key: userContext.key,
         displayName: profile.displayName || userContext.displayName
       },
-      data: buildDownloadsPayload(profile, catalog)
+      data: libraryStore.buildDownloadsPayload(profile, catalog)
     });
   } catch (error) {
     return res.status(500).json({ error: 'Unable to load downloads data.' });
@@ -2394,9 +1799,9 @@ app.post('/api/downloads/toggle', async (req, res) => {
       return res.status(404).json({ error: 'Download item not found in content catalog.' });
     }
 
-    const userContext = resolveLibraryUser(req);
-    const store = readLibraryStore();
-    const { profile } = getOrCreateLibraryProfile(store, userContext);
+    const userContext = libraryStore.resolveLibraryUser(req);
+    const store = libraryStore.readLibraryStore();
+    const { profile } = libraryStore.getOrCreateLibraryProfile(store, userContext);
     profile.downloads = profile.downloads || {};
     profile.downloads.ready = profile.downloads.ready || [];
     profile.downloads.queue = profile.downloads.queue || [];
@@ -2410,7 +1815,7 @@ app.post('/api/downloads/toggle', async (req, res) => {
     } else {
       profile.downloads.ready.unshift({
         contentId: content.id,
-        category: getLibraryCategoryForType(content.type),
+        category: libraryStore.getLibraryCategoryForType(content.type),
         tag: `${formatContentTypeLabel(content.type)} - Offline`,
         note: `${content.subtitle || 'Lytune'} - Saved for offline use`
       });
@@ -2419,14 +1824,14 @@ app.post('/api/downloads/toggle', async (req, res) => {
       downloaded = true;
     }
 
-    updateSummaryFromProfile(profile);
+    libraryStore.updateSummaryFromProfile(profile);
     profile.updatedAt = new Date().toISOString();
-    writeLibraryStore(store);
+    libraryStore.writeLibraryStore(store);
 
     return res.json({
       success: true,
       downloaded,
-      data: buildDownloadsPayload(profile, catalog)
+      data: libraryStore.buildDownloadsPayload(profile, catalog)
     });
   } catch (error) {
     return res.status(500).json({ error: 'Unable to update downloads state.' });
@@ -2435,23 +1840,23 @@ app.post('/api/downloads/toggle', async (req, res) => {
 
 app.get('/api/history', async (req, res) => {
   try {
-    const userContext = resolveLibraryUser(req);
-    const store = readLibraryStore();
-    const { profile, created } = getOrCreateLibraryProfile(store, userContext);
+    const userContext = libraryStore.resolveLibraryUser(req);
+    const store = libraryStore.readLibraryStore();
+    const { profile, created } = libraryStore.getOrCreateLibraryProfile(store, userContext);
 
     if (created) {
-      writeLibraryStore(store);
+      libraryStore.writeLibraryStore(store);
     }
 
     const catalog = await getContentCatalog();
 
     return res.json({
-      source: 'file',
+      source: 'sqlite',
       user: {
         key: userContext.key,
         displayName: profile.displayName || userContext.displayName
       },
-      data: buildHistoryPayload(profile, catalog)
+      data: libraryStore.buildHistoryPayload(profile, catalog)
     });
   } catch (error) {
     return res.status(500).json({ error: 'Unable to load history data.' });
@@ -2475,11 +1880,11 @@ app.post('/api/history/add', async (req, res) => {
       return res.status(404).json({ error: 'History item not found in content catalog.' });
     }
 
-    const userContext = resolveLibraryUser(req);
-    const store = readLibraryStore();
-    const { profile } = getOrCreateLibraryProfile(store, userContext);
+    const userContext = libraryStore.resolveLibraryUser(req);
+    const store = libraryStore.readLibraryStore();
+    const { profile } = libraryStore.getOrCreateLibraryProfile(store, userContext);
     const playedAt = new Date().toISOString();
-    const note = formatHistoryNote(content, 'Played moments ago');
+    const note = libraryStore.formatHistoryNote(content, 'Played moments ago');
     profile.history = [
       {
         contentId: content.id,
@@ -2489,14 +1894,14 @@ app.post('/api/history/add', async (req, res) => {
       ...(profile.history || []).filter((entry) => entry.contentId !== content.id)
     ].slice(0, 12);
 
-    updateRecentFromHistory(profile, content, note);
-    updateSummaryFromProfile(profile);
+    libraryStore.updateRecentFromHistory(profile, content, note);
+    libraryStore.updateSummaryFromProfile(profile);
     profile.updatedAt = playedAt;
-    writeLibraryStore(store);
+    libraryStore.writeLibraryStore(store);
 
     return res.json({
       success: true,
-      data: buildHistoryPayload(profile, catalog)
+      data: libraryStore.buildHistoryPayload(profile, catalog)
     });
   } catch (error) {
     return res.status(500).json({ error: 'Unable to update history.' });
@@ -2511,18 +1916,18 @@ app.get('/api/moments', async (req, res) => {
   }
 
   try {
-    const userContext = resolveLibraryUser(req);
-    const store = readLibraryStore();
-    const { profile, created } = getOrCreateLibraryProfile(store, userContext);
+    const userContext = libraryStore.resolveLibraryUser(req);
+    const store = libraryStore.readLibraryStore();
+    const { profile, created } = libraryStore.getOrCreateLibraryProfile(store, userContext);
     profile.moments = profile.moments || {};
 
     if (created) {
-      writeLibraryStore(store);
+      libraryStore.writeLibraryStore(store);
     }
 
     return res.json({
-      source: 'file',
-      data: buildMomentPayload(profile, contentId)
+      source: 'sqlite',
+      data: libraryStore.buildMomentPayload(profile, contentId)
     });
   } catch (error) {
     return res.status(500).json({ error: 'Unable to load your saved Lytune Moment.' });
@@ -2539,9 +1944,9 @@ app.post('/api/moments/upsert', async (req, res) => {
   }
 
   try {
-    const userContext = resolveLibraryUser(req);
-    const store = readLibraryStore();
-    const { profile } = getOrCreateLibraryProfile(store, userContext);
+    const userContext = libraryStore.resolveLibraryUser(req);
+    const store = libraryStore.readLibraryStore();
+    const { profile } = libraryStore.getOrCreateLibraryProfile(store, userContext);
     const updatedAt = new Date().toISOString();
 
     profile.moments = profile.moments || {};
@@ -2557,11 +1962,11 @@ app.post('/api/moments/upsert', async (req, res) => {
     }
 
     profile.updatedAt = updatedAt;
-    writeLibraryStore(store);
+    libraryStore.writeLibraryStore(store);
 
     return res.json({
-      source: 'file',
-      data: buildMomentPayload(profile, contentId)
+      source: 'sqlite',
+      data: libraryStore.buildMomentPayload(profile, contentId)
     });
   } catch (error) {
     return res.status(500).json({ error: 'Unable to save your Lytune Moment.' });
@@ -2570,23 +1975,23 @@ app.post('/api/moments/upsert', async (req, res) => {
 
 app.get('/api/playlists', async (req, res) => {
   try {
-    const userContext = resolveLibraryUser(req);
-    const store = readLibraryStore();
-    const { profile, created } = getOrCreateLibraryProfile(store, userContext);
+    const userContext = libraryStore.resolveLibraryUser(req);
+    const store = libraryStore.readLibraryStore();
+    const { profile, created } = libraryStore.getOrCreateLibraryProfile(store, userContext);
 
     if (created) {
-      writeLibraryStore(store);
+      libraryStore.writeLibraryStore(store);
     }
 
     const catalog = await getContentCatalog();
 
     return res.json({
-      source: 'file',
+      source: 'sqlite',
       user: {
         key: userContext.key,
         displayName: profile.displayName || userContext.displayName
       },
-      data: buildPlaylistsPayload(profile, catalog)
+      data: libraryStore.buildPlaylistsPayload(profile, catalog)
     });
   } catch (error) {
     return res.status(500).json({ error: 'Unable to load playlists.' });
@@ -2616,9 +2021,9 @@ app.post('/api/playlists/create', async (req, res) => {
       }
     }
 
-    const userContext = resolveLibraryUser(req);
-    const store = readLibraryStore();
-    const { profile } = getOrCreateLibraryProfile(store, userContext);
+    const userContext = libraryStore.resolveLibraryUser(req);
+    const store = libraryStore.readLibraryStore();
+    const { profile } = libraryStore.getOrCreateLibraryProfile(store, userContext);
     profile.playlists = profile.playlists || [];
     const updatedAt = new Date().toISOString();
 
@@ -2633,12 +2038,12 @@ app.post('/api/playlists/create', async (req, res) => {
 
     profile.playlists.unshift(playlist);
     profile.updatedAt = updatedAt;
-    writeLibraryStore(store);
+    libraryStore.writeLibraryStore(store);
 
     return res.status(201).json({
       success: true,
       createdPlaylistId: playlist.id,
-      data: buildPlaylistsPayload(profile, catalog)
+      data: libraryStore.buildPlaylistsPayload(profile, catalog)
     });
   } catch (error) {
     return res.status(500).json({ error: 'Unable to create playlist.' });
@@ -2667,9 +2072,9 @@ app.post('/api/playlists/add-item', async (req, res) => {
       return res.status(404).json({ error: 'Playlist item was not found in content catalog.' });
     }
 
-    const userContext = resolveLibraryUser(req);
-    const store = readLibraryStore();
-    const { profile } = getOrCreateLibraryProfile(store, userContext);
+    const userContext = libraryStore.resolveLibraryUser(req);
+    const store = libraryStore.readLibraryStore();
+    const { profile } = libraryStore.getOrCreateLibraryProfile(store, userContext);
     profile.playlists = profile.playlists || [];
 
     const playlist = profile.playlists.find((entry) => entry.id === playlistId);
@@ -2692,13 +2097,13 @@ app.post('/api/playlists/add-item', async (req, res) => {
     const updatedAt = new Date().toISOString();
     playlist.updatedAt = updatedAt;
     profile.updatedAt = updatedAt;
-    writeLibraryStore(store);
+    libraryStore.writeLibraryStore(store);
 
     return res.json({
       success: true,
       added: !alreadyPresent,
       playlistId: playlist.id,
-      data: buildPlaylistsPayload(profile, catalog)
+      data: libraryStore.buildPlaylistsPayload(profile, catalog)
     });
   } catch (error) {
     return res.status(500).json({ error: 'Unable to add item to playlist.' });
@@ -2707,12 +2112,12 @@ app.post('/api/playlists/add-item', async (req, res) => {
 
 app.get('/api/dashboard', async (req, res) => {
   try {
-    const userContext = resolveLibraryUser(req);
-    const store = readLibraryStore();
-    const { profile, created } = getOrCreateLibraryProfile(store, userContext);
+    const userContext = libraryStore.resolveLibraryUser(req);
+    const store = libraryStore.readLibraryStore();
+    const { profile, created } = libraryStore.getOrCreateLibraryProfile(store, userContext);
 
     if (created) {
-      writeLibraryStore(store);
+      libraryStore.writeLibraryStore(store);
     }
 
     const [catalog, homePayload] = await Promise.all([
@@ -2726,7 +2131,7 @@ app.get('/api/dashboard', async (req, res) => {
       }))
     ]);
 
-    updateSummaryFromProfile(profile);
+    libraryStore.updateSummaryFromProfile(profile);
 
     return res.json({
       source: hasHomePayloadContent(homePayload) ? 'live' : 'fallback',
@@ -2734,10 +2139,10 @@ app.get('/api/dashboard', async (req, res) => {
         key: userContext.key,
         displayName: profile.displayName || userContext.displayName
       },
-      library: buildLibraryPayload(profile, catalog),
-      downloads: buildDownloadsPayload(profile, catalog),
-      history: buildHistoryPayload(profile, catalog),
-      playlists: buildPlaylistsPayload(profile, catalog),
+      library: libraryStore.buildLibraryPayload(profile, catalog),
+      downloads: libraryStore.buildDownloadsPayload(profile, catalog),
+      history: libraryStore.buildHistoryPayload(profile, catalog),
+      playlists: libraryStore.buildPlaylistsPayload(profile, catalog),
       deezer: {
         freshTracks: (homePayload.topTracks || []).slice(0, 4),
         freshAlbums: (homePayload.topAlbums || []).slice(0, 4),
@@ -3143,6 +2548,10 @@ app.post('/api/auth/google', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on ${PREFERRED_LOCAL_ORIGIN}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server is running on ${PREFERRED_LOCAL_ORIGIN}`);
+  });
+}
+
+module.exports = app;

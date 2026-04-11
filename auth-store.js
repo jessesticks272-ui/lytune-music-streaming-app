@@ -2,12 +2,28 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-const DATA_DIRECTORY = path.join(__dirname, 'data');
+const resolveDataDirectory = () => {
+  if (process.env.LYTUNE_DATA_DIR) {
+    return path.isAbsolute(process.env.LYTUNE_DATA_DIR)
+      ? process.env.LYTUNE_DATA_DIR
+      : path.join(__dirname, process.env.LYTUNE_DATA_DIR);
+  }
+
+  // Vercel functions can only write to /tmp at runtime.
+  if (process.env.VERCEL) {
+    return path.join('/tmp', 'lytune-data');
+  }
+
+  return path.join(__dirname, 'data');
+};
+
+const DATA_DIRECTORY = resolveDataDirectory();
 const AUTH_STORE_PATH = path.join(DATA_DIRECTORY, 'auth-store.json');
 const AUTH_SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000;
 const PASSWORD_KEY_LENGTH = 64;
 const MIN_PASSWORD_LENGTH = 8;
 const MAX_USERNAME_LENGTH = 40;
+const MAX_AVATAR_DATA_URL_LENGTH = 4 * 1024 * 1024;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const createEmptyAuthStore = () => ({
@@ -167,6 +183,42 @@ const normalizeFavoriteArtists = (value) => {
   });
 
   return uniqueItems.slice(0, 5);
+};
+
+const normalizeAuthAvatar = (value) => {
+  if (value == null || value === '') {
+    return null;
+  }
+
+  const avatar = value.toString().trim();
+
+  if (!avatar) {
+    return null;
+  }
+
+  if (avatar.startsWith('data:image/')) {
+    if (!avatar.includes(';base64,')) {
+      throw new Error('Profile photo must be a valid image.');
+    }
+
+    if (avatar.length > MAX_AVATAR_DATA_URL_LENGTH) {
+      throw new Error('Profile photo is too large. Choose a smaller image.');
+    }
+
+    return avatar;
+  }
+
+  try {
+    const parsedUrl = new URL(avatar);
+
+    if (parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:') {
+      return avatar;
+    }
+  } catch (error) {
+    // Ignore invalid URLs and fall through to the validation error below.
+  }
+
+  throw new Error('Profile photo must be a valid image.');
 };
 
 const updateOnboardingStatus = (user) => {
@@ -394,6 +446,15 @@ const updateAuthUserProfile = (user, payload = {}) => {
 
     if (currentArtists !== nextArtists) {
       user.favoriteArtists = favoriteArtists;
+      changed = true;
+    }
+  }
+
+  if (Object.prototype.hasOwnProperty.call(payload, 'avatar')) {
+    const nextAvatar = normalizeAuthAvatar(payload.avatar);
+
+    if ((user.avatar || null) !== nextAvatar) {
+      user.avatar = nextAvatar;
       changed = true;
     }
   }

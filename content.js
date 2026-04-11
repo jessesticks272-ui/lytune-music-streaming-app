@@ -40,52 +40,52 @@ document.addEventListener("DOMContentLoaded", () => {
   const momentStatus = document.getElementById("moment-status");
   const moodButtons = Array.from(document.querySelectorAll(".mood-chip"));
   const CONTENT_API_CANDIDATES = [
-    "http://lytune.localhost:3000/api/content-detail",
-    "/api/content-detail"
+    "/api/content-detail",
+    "http://lytune.localhost:3000/api/content-detail"
   ];
   const LYRICS_API_CANDIDATES = [
-    "http://lytune.localhost:3000/api/lyrics",
-    "/api/lyrics"
+    "/api/lyrics",
+    "http://lytune.localhost:3000/api/lyrics"
   ];
   const MOMENTS_API_CANDIDATES = [
-    "http://lytune.localhost:3000/api/moments",
-    "/api/moments"
+    "/api/moments",
+    "http://lytune.localhost:3000/api/moments"
   ];
   const MOMENTS_SAVE_API_CANDIDATES = [
-    "http://lytune.localhost:3000/api/moments/upsert",
-    "/api/moments/upsert"
+    "/api/moments/upsert",
+    "http://lytune.localhost:3000/api/moments/upsert"
   ];
   const HISTORY_ADD_API_CANDIDATES = [
-    "http://lytune.localhost:3000/api/history/add",
-    "/api/history/add"
+    "/api/history/add",
+    "http://lytune.localhost:3000/api/history/add"
   ];
   const LIBRARY_API_CANDIDATES = [
-    "http://lytune.localhost:3000/api/library",
-    "/api/library"
+    "/api/library",
+    "http://lytune.localhost:3000/api/library"
   ];
   const LIBRARY_TOGGLE_API_CANDIDATES = [
-    "http://lytune.localhost:3000/api/library/toggle",
-    "/api/library/toggle"
+    "/api/library/toggle",
+    "http://lytune.localhost:3000/api/library/toggle"
   ];
   const DOWNLOADS_API_CANDIDATES = [
-    "http://lytune.localhost:3000/api/downloads",
-    "/api/downloads"
+    "/api/downloads",
+    "http://lytune.localhost:3000/api/downloads"
   ];
   const DOWNLOADS_TOGGLE_API_CANDIDATES = [
-    "http://lytune.localhost:3000/api/downloads/toggle",
-    "/api/downloads/toggle"
+    "/api/downloads/toggle",
+    "http://lytune.localhost:3000/api/downloads/toggle"
   ];
   const PLAYLISTS_API_CANDIDATES = [
-    "http://lytune.localhost:3000/api/playlists",
-    "/api/playlists"
+    "/api/playlists",
+    "http://lytune.localhost:3000/api/playlists"
   ];
   const PLAYLISTS_CREATE_API_CANDIDATES = [
-    "http://lytune.localhost:3000/api/playlists/create",
-    "/api/playlists/create"
+    "/api/playlists/create",
+    "http://lytune.localhost:3000/api/playlists/create"
   ];
   const PLAYLISTS_ADD_API_CANDIDATES = [
-    "http://lytune.localhost:3000/api/playlists/add-item",
-    "/api/playlists/add-item"
+    "/api/playlists/add-item",
+    "http://lytune.localhost:3000/api/playlists/add-item"
   ];
   const params = new URLSearchParams(window.location.search);
   const contentId = params.get("id") || "";
@@ -1232,31 +1232,47 @@ document.addEventListener("DOMContentLoaded", () => {
     dropdown.classList.toggle("show");
   });
 
-  upload.addEventListener("change", function () {
+  upload.addEventListener("change", async function () {
     const file = this.files[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = function () {
-      avatar.src = reader.result;
-      localStorage.setItem("avatar", reader.result);
-    };
+    try {
+      await window.LytuneAuth?.handleProfileUpload(file, { silentSuccess: true });
+    } catch (error) {
+      window.LytuneAuth?.setMessage(error.message || "We could not save your profile picture.", "error");
+    } finally {
+      this.value = "";
+    }
 
-    reader.readAsDataURL(file);
     dropdown.classList.remove("show");
   });
 
-  changeNameButton.addEventListener("click", () => {
+  changeNameButton.addEventListener("click", async () => {
     const newName = prompt("Enter your name:", username.textContent);
     if (!newName || !newName.trim()) return;
 
-    username.textContent = newName.trim();
-    localStorage.setItem("username", newName.trim());
+    const trimmedName = newName.trim();
+    username.textContent = trimmedName;
+    localStorage.setItem("username", trimmedName);
+
+    try {
+      if (localStorage.getItem("authToken") && window.LytuneAuth?.updateProfile) {
+        await window.LytuneAuth.updateProfile({ username: trimmedName });
+      }
+    } catch (error) {
+      window.LytuneAuth?.setMessage(error.message || "We could not save your name.", "error");
+    }
+
     dropdown.classList.remove("show");
   });
 
-  logoutButton.addEventListener("click", () => {
-    localStorage.clear();
+  logoutButton.addEventListener("click", async () => {
+    if (window.LytuneAuth?.logout) {
+      await window.LytuneAuth.logout();
+    } else {
+      localStorage.clear();
+    }
+
     window.location.reload();
   });
 
