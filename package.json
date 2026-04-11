@@ -4,6 +4,7 @@
   "description": "Lytune music streaming app prototype built with HTML, CSS, JavaScript, Node.js, and Express.",
   "main": "choose-artist.js",
   "scripts": {
+    "build": "node -e \"console.log('Lytune does not require a separate build step.')\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
